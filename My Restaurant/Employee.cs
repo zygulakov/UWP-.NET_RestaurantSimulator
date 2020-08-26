@@ -3,16 +3,17 @@ namespace My_Restaurant
 {
     class Employee
     {
-        private static int numberOfInstances = 0;
+        private static int numberOfRequests = 0;
         private static  bool isItNewReq;
         private object lastOrder;
         private object currentOrder;
         public Employee()
         {
-            numberOfInstances++;
         }
         public object NewRequest(int quantity,object menuItem)
         {
+            //for each new request
+            numberOfRequests++;
             //for each request one food preperation
             isItNewReq = true;
             //wrong order of chicken
@@ -21,7 +22,7 @@ namespace My_Restaurant
                 case ChickenOrder chickenOrder:
                     lastOrder = currentOrder;
                     //wrong order
-                    if(numberOfInstances%3==0)
+                    if(numberOfRequests % 3==0)
                     {
                         EggOrder wrongEggOrder = new EggOrder(quantity);
                         currentOrder = wrongEggOrder;
@@ -33,7 +34,7 @@ namespace My_Restaurant
                 case EggOrder eggOrder:
                      lastOrder = currentOrder;
                     //wrong order
-                    if (numberOfInstances % 3 == 0)
+                    if (numberOfRequests % 3 == 0)
                     {
                         ChickenOrder wrongChickenOrder = new ChickenOrder(quantity);
                         currentOrder = wrongChickenOrder;
