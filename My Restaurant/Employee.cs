@@ -4,68 +4,52 @@ namespace My_Restaurant
     class Employee
     {
         private static int numberOfRequests = 0;
-        private static  bool isItNewReq;
-        private object lastOrder;
-        private object currentOrder;
-        public Employee()
-        {
-        }
-        public object NewRequest(int quantity,object menuItem)
+        private static bool isItNewReq;
+        private object order;
+        public object NewRequest(int quantity, string menuItem)
         {
             //for each new request
             numberOfRequests++;
             //for each request one food preperation
             isItNewReq = true;
-            //wrong order of chicken
-            switch (menuItem)
+
+            ChickenOrder chickenOrder = new ChickenOrder(quantity);
+            EggOrder eggOrder = new EggOrder(quantity);
+
+            if (menuItem == "Egg")
             {
-                case ChickenOrder chickenOrder:
-                    lastOrder = currentOrder;
-                    //wrong order
-                    if(numberOfRequests % 3==0)
-                    {
-                        EggOrder wrongEggOrder = new EggOrder(quantity);
-                        currentOrder = wrongEggOrder;
-                    }else
-                    {
-                        currentOrder = chickenOrder;
-                    }
-                    return currentOrder;
-                case EggOrder eggOrder:
-                     lastOrder = currentOrder;
-                    //wrong order
-                    if (numberOfRequests % 3 == 0)
-                    {
-                        ChickenOrder wrongChickenOrder = new ChickenOrder(quantity);
-                        currentOrder = wrongChickenOrder;
-                    }
-                    else
-                    {
-                        currentOrder = eggOrder;
-                    }
-                    return currentOrder;
-                default:
-                    throw new Exception("wrong menuItem");
-                    
+                //for the wrong order
+                if (numberOfRequests % 3 == 0)
+                    order = chickenOrder;
+                else
+                    order = eggOrder;
+
             }
-            
-            
- 
+            else
+            {
+                if (numberOfRequests % 3 == 0)
+                    order = eggOrder;
+                else
+                    order = chickenOrder;
+
+            }
+            return order;
+
         }
         public object CopyRequest()
         {
-            if (lastOrder == null)
-                throw new Exception("there is no last order to copy");
             isItNewReq = true;
-            return lastOrder;
+            if (order is EggOrder eggOrder)
+                return eggOrder.Clone();
+            return new ChickenOrder(((ChickenOrder)order).GetQuantity());
         }
         public string Inspect(object menuItem)
         {
-            if(menuItem is EggOrder eggOrder)
+            if (menuItem is EggOrder eggOrder)
             {
-                return eggOrder.GetQuality()+"";
+                return eggOrder.GetQuality() + "";
             }
-            return "no inspection is required";
+            return "Its chicken ,no inspection is required";
 
         }
         public string PrepareFood(object menuItem)
@@ -75,9 +59,9 @@ namespace My_Restaurant
                 throw new Exception("no Order to prepare!");
             isItNewReq = false;
             //for chicken
-            if(menuItem is ChickenOrder chickenOrder)
+            if (menuItem is ChickenOrder chickenOrder)
             {
-                for(int i = 0; i<chickenOrder.GetQuantity(); i++)
+                for (int i = 0; i < chickenOrder.GetQuantity(); i++)
                 {
                     chickenOrder.CutUp();
                 }
@@ -87,16 +71,17 @@ namespace My_Restaurant
             //for egg
             EggOrder eggOrder = (EggOrder)menuItem;
             int numOfRottenEggs = 0;
-            for(int i = 0; i < eggOrder.GetQuantity(); i++)
+            for (int i = 0; i < eggOrder.GetQuantity(); i++)
             {
                 try
                 {
-                eggOrder.Crack();
+                    eggOrder.Crack();
 
-                }catch(Exception)
+                }
+                catch (Exception)
                 {
                     numOfRottenEggs++;
-                    
+
                 }
                 finally
                 {

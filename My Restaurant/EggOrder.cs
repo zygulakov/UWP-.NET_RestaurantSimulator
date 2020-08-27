@@ -48,6 +48,12 @@ namespace My_Restaurant
             
 
         }
+        public EggOrder Clone()
+        {
+            EggOrder cloneEggOrder = new EggOrder(quantity);
+            cloneEggOrder.quality = quality;
+            return cloneEggOrder;
+        }
         
 
     }

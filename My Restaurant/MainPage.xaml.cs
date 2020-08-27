@@ -35,63 +35,42 @@ namespace My_Restaurant
             try
             {
 
-            int quantityOfFood = int.Parse(quantity.Text);
+                int quantityOfFood = int.Parse(quantity.Text);
 
-            if(chicken.IsChecked.HasValue && chicken.IsChecked.Value)
-            {
-            object order = employee.NewRequest(quantityOfFood,new ChickenOrder(quantityOfFood));
-            String result = employee.Inspect(order);
-            orderToCook = order;
-                    
-            Results.Text += result + "\n";
-
-            }
-            else
-            {
-                EggOrder order = (EggOrder)employee.NewRequest(quantityOfFood, new EggOrder(quantityOfFood));
-                String result = employee.Inspect(order);
-                    //Results.Text = result;
-                    orderToCook = order;
-                quality.Text = result;
-            }
-            }catch(Exception ex)
-            {
-                Results.Text += ex.Message + "\n";
-            }
-        }   
-
-        private void copyPrevReq_Click(object sender, RoutedEventArgs e)
-        {
-            
-            try
-            {
-            object request = employee.CopyRequest();
-                orderToCook = request;
-                if(request is EggOrder eggOrder)
-                {
-                    // setting radioButtons
-                    chicken.IsChecked = false ;
-                    egg.IsChecked = true ;
-                    quantity.Text = eggOrder.GetQuantity() + "";
-                    quality.Text = employee.Inspect(eggOrder);
-
-
-                }
+                if (chicken.IsChecked.HasValue && chicken.IsChecked.Value)
+                    orderToCook = employee.NewRequest(quantityOfFood, "Chicken");
                 else
-                {
-                    chicken.IsChecked = true;
-                    egg.IsChecked = false;
-                    //settting quantity field
-                    quality.Text = "quality";
-                    quantity.Text = ((ChickenOrder) request).GetQuantity() + "";
-                    Results.Text += employee.Inspect(request) +"\n";
+                    orderToCook = employee.NewRequest(quantityOfFood, "Egg");
 
-                }
-                
+
+                string result = employee.Inspect(orderToCook);
+                if (orderToCook is EggOrder)
+                    quality.Text = result;//for egg result of inspetion goes to quality TextBox
+                else
+                    Results.Text += result + "\n";
+
             }
             catch (Exception ex)
             {
-               Results.Text += ex.Message + "\n";
+                Results.Text += ex.Message + "\n";
+            }
+        }
+
+        private void copyPrevReq_Click(object sender, RoutedEventArgs e)
+        {
+
+            try
+            {
+                orderToCook = employee.CopyRequest();
+                string result = employee.Inspect(orderToCook);
+                if (orderToCook is EggOrder)
+                    quality.Text = result;
+                else
+                    Results.Text += result + "\n";
+            }
+            catch (Exception ex)
+            {
+                Results.Text += ex.Message + "\n";
             }
         }
 
@@ -99,10 +78,11 @@ namespace My_Restaurant
         {
             try
             {
-            string result = employee.PrepareFood(orderToCook);
-            Results.Text += result + "\n";
+                string result = employee.PrepareFood(orderToCook);
+                Results.Text += result + "\n";
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Results.Text += ex.Message + "\n";
             }
