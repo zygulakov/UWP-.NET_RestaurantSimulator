@@ -8,7 +8,10 @@ namespace My_Restaurant
         private object order;
         public object NewRequest(int quantity, string menuItem)
         {
-            //for each new request
+            if (menuItem != "Egg" && menuItem != "Chicken")
+                throw new ArgumentException("no such menu item");
+
+            //counting each request to  simulate employee forgetting
             numberOfRequests++;
             //for each request one food preperation
             isItNewReq = true;
@@ -23,7 +26,6 @@ namespace My_Restaurant
                     order = chickenOrder;
                 else
                     order = eggOrder;
-
             }
             else
             {
@@ -31,24 +33,23 @@ namespace My_Restaurant
                     order = eggOrder;
                 else
                     order = chickenOrder;
-
             }
             return order;
-
         }
         public object CopyRequest()
         {
+            // setting as new request
             isItNewReq = true;
             if (order is EggOrder eggOrder)
                 return eggOrder.Clone();
+
             return new ChickenOrder(((ChickenOrder)order).GetQuantity());
         }
         public string Inspect(object menuItem)
         {
             if (menuItem is EggOrder eggOrder)
-            {
                 return eggOrder.GetQuality() + "";
-            }
+
             return "Its chicken ,no inspection is required";
 
         }
@@ -57,6 +58,8 @@ namespace My_Restaurant
             //checking if prepareFood called twice in a row
             if (!isItNewReq)
                 throw new Exception("no Order to prepare!");
+            
+            // after foood prepared , there must be new request
             isItNewReq = false;
             //for chicken
             if (menuItem is ChickenOrder chickenOrder)
@@ -76,18 +79,15 @@ namespace My_Restaurant
                 try
                 {
                     eggOrder.Crack();
-
                 }
                 catch (Exception)
                 {
                     numOfRottenEggs++;
-
                 }
                 finally
                 {
                     eggOrder.DiscardShell();
                 }
-
             }
             eggOrder.Cook();
             return "Cooking has been comleted!.Number of rotten eggs: " + numOfRottenEggs;

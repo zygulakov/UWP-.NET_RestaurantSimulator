@@ -14,11 +14,9 @@ namespace My_Restaurant
         }
         public void CutUp()
         {
-            
         }
         public void Cook()
         {
-
         }
     }
 }

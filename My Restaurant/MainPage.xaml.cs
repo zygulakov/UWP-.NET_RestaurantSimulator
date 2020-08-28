@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -34,37 +23,32 @@ namespace My_Restaurant
         {
             try
             {
-
                 int quantityOfFood = int.Parse(quantity.Text);
 
-                if (chicken.IsChecked.HasValue && chicken.IsChecked.Value)
-                    orderToCook = employee.NewRequest(quantityOfFood, "Chicken");
-                else
-                    orderToCook = employee.NewRequest(quantityOfFood, "Egg");
-
+                if (chicken.IsChecked.HasValue && chicken.IsChecked.Value)                
+                    orderToCook = employee.NewRequest(quantityOfFood, "Chicken");                
+                else                
+                    orderToCook = employee.NewRequest(quantityOfFood, "Egg");              
 
                 string result = employee.Inspect(orderToCook);
-                if (orderToCook is EggOrder)
-                    quality.Text = result;//for egg result of inspetion goes to quality TextBox
-                else
-                    Results.Text += result + "\n";
-
+                if (orderToCook is EggOrder)               
+                    quality.Text = result;//for egg result of inspetion goes to quality TextBox                
+                else               
+                    Results.Text += result + "\n";               
             }
             catch (Exception ex)
             {
                 Results.Text += ex.Message + "\n";
             }
         }
-
         private void copyPrevReq_Click(object sender, RoutedEventArgs e)
         {
-
             try
             {
                 orderToCook = employee.CopyRequest();
                 string result = employee.Inspect(orderToCook);
-                if (orderToCook is EggOrder)
-                    quality.Text = result;
+                if (orderToCook is EggOrder)                
+                    quality.Text = result;             
                 else
                     Results.Text += result + "\n";
             }
@@ -73,20 +57,17 @@ namespace My_Restaurant
                 Results.Text += ex.Message + "\n";
             }
         }
-
         private void prepareFoodButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 string result = employee.PrepareFood(orderToCook);
                 Results.Text += result + "\n";
-
             }
             catch (Exception ex)
             {
                 Results.Text += ex.Message + "\n";
             }
-
         }
     }
 }
