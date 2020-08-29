@@ -40,6 +40,8 @@ namespace My_Restaurant
         {
             // setting as new request
             isItNewReq = true;
+            if (order == null)
+                throw new Exception("You havent made any order yet ");
             if (order is EggOrder eggOrder)
                 return eggOrder.Clone();
 
