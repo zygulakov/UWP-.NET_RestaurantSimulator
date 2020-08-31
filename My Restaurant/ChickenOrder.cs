@@ -1,21 +1,15 @@
 ﻿
 namespace My_Restaurant
 {
-    class ChickenOrder
+    class ChickenOrder:Order
     {
-        private int quantity;
-        public ChickenOrder(int quantity)
+        public ChickenOrder(int quantity):base(quantity)
         {
-            this.quantity = quantity;
-        }
-        public int GetQuantity()
-        {
-            return quantity;
         }
         public void CutUp()
         {
         }
-        public void Cook()
+        public override void Cook()
         {
         }
     }

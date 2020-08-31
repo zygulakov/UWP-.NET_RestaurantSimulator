@@ -121,11 +121,14 @@
     </Compile>
     <Compile Include="ChickenOrder.cs" />
     <Compile Include="EggOrder.cs" />
-    <Compile Include="Employee.cs" />
+    <Compile Include="EmployeeCook.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MenuItem.cs" />
+    <Compile Include="Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="EmployeeServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
