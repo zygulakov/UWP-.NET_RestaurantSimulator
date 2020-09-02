@@ -1,14 +1,16 @@
 ﻿using System;
 namespace My_Restaurant
 {
-    class EggOrder:Order
+    //TODO: Please use private, protected for some methods
+    class EggOrder : Order
     {
         private int? quality;
-        public EggOrder(int quantity) :base(quantity)
+        public EggOrder(int quantity) : base(quantity)
         {
             Random randQuality = new Random();
             quality = randQuality.Next(101);
         }
+        //TODO: You should use this GetQuality method
         public int? GetQuality()
         {
             return quality;
