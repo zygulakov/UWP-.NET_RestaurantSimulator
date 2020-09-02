@@ -1,9 +1,9 @@
 ﻿
 namespace My_Restaurant
 {
-    class ChickenOrder:Order
+    class ChickenOrder : Order
     {
-        public ChickenOrder(int quantity):base(quantity)
+        public ChickenOrder(int quantity) : base(quantity)
         {
         }
         public void CutUp()

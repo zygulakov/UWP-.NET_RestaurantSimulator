@@ -48,7 +48,7 @@ namespace My_Restaurant
             return $"Recieved from customer {ordersCount - 1} :  {eggQuantity} egg, {chickenQuantity} chicken and {drink}";
         }
         public string[] SendReqToCook()
-        {
+        {  //TODO: Create Serve() method in this class and move some code to that Serve method
             if (!isTherNewReq)
                 throw new Exception("NO REQUEST TO SEND TO COOK");
             string[] result = new string[ordersCount];
@@ -62,13 +62,10 @@ namespace My_Restaurant
                 //for each items in the each order except(drink)
                 foreach (MenuItem item in items)
                 {
-                    if (item.Equals(MenuItem.Chicken) || item.Equals(MenuItem.Egg))
-                    {
-                        if (item.Equals(MenuItem.Egg))
-                            eggCount++;
-                        else
-                            chickenCount++;
-                    }
+                    if (item.Equals(MenuItem.Chicken))
+                        chickenCount++;
+                    if (item.Equals(MenuItem.Egg))
+                        eggCount++;
                 }
                 //egg
                 Order preparedOrder = employeeCook.NewRequest(eggCount, MenuItem.Egg);
