@@ -13,31 +13,33 @@ namespace My_Restaurant
     public sealed partial class MainPage : Page
     {
         private EmployeeServer employeeServer;
-        private string[] resultToServe;
+        private EmployeeCook employeeCook;
         public MainPage()
         {
             this.InitializeComponent();
             employeeServer = new EmployeeServer();
-            
+            employeeCook = new EmployeeCook();
+            foreach (MenuItemBeverage drink in Enum.GetValues(typeof(MenuItemBeverage)))
+                DrinksList.Items.Add(drink);
+
         }
 
         private void submitReqButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-
                 int eggQuantitiy = int.Parse(amountOfEgg.Text);
                 int chickenQuantity = int.Parse(amountOfChicken.Text);
-                string drinkAsString = ((ComboBoxItem)DrinksList.SelectedItem).Content.ToString();
-                MenuItem drink = (MenuItem)Enum.Parse(typeof(MenuItem), drinkAsString);
+                MenuItemBeverage drink =(MenuItemBeverage) DrinksList.SelectedItem;
+                
                 string result = employeeServer.RecieveRequest(eggQuantitiy, chickenQuantity, drink);
                 Results.Text += result + "\n";
             }
-            catch (FormatException )
+            catch (FormatException)
             {
                 Results.Text += "please enter valid amount" + "\n";
             }
-            catch (NullReferenceException )
+            catch (NullReferenceException)
             {
                 Results.Text += "plese select a drink" + "\n";
             }
@@ -52,9 +54,11 @@ namespace My_Restaurant
         {
             try
             {
-               resultToServe = employeeServer.SendReqToCook();
-                Results.Text += "Cooking ... \n" +
-                    "ready! \n";
+                
+
+
+                string result = employeeServer.SendReqToCook();
+                Results.Text += result + "\n";
             }
             catch (Exception ex)
             {
@@ -66,18 +70,18 @@ namespace My_Restaurant
         {
             try
             {
-            foreach (string str in resultToServe)
-            {
-                Results.Text += str + "\n";
-            }
+                string[] resultsOfServing = employeeServer.Serve();
+                foreach (string result in resultsOfServing)
+                {
+                    Results.Text += result + "\n";
+                }
 
             }
-            catch (NullReferenceException ex)
+            catch (Exception ex)
             {
 
-                Results.Text += "Nothing to Serve! \n";
+                Results.Text += ex; 
             }
-            resultToServe = null;
         }
     }
 }

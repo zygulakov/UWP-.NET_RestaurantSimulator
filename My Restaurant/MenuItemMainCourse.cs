@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace My_Restaurant
 {
     //TODO: What about splitting drink types into other derived enum of MenuItem? Then you will fill the combobox of drinks from that enum elements.
-    enum MenuItem
+    enum MenuItemMainCourse
     {
-        Egg, Chicken, Fanta, Tea, Juice, NoDrink
+        Egg, Chicken
     }
 }

@@ -15,14 +15,24 @@ namespace My_Restaurant
         {
             return quality;
         }
-        public void Crack()
+        private void Crack()
         {
         }
-        public void DiscardShell()
+        private void DiscardShell()
         {
         }
         public override void Cook()
         {
+            for (int i = 0; i < GetQuantity(); i++)
+            {
+                Crack();
+                DiscardShell();
+            }
+            
+        }
+        public override string ToString()
+        {
+            return MenuItemMainCourse.Egg.ToString();
         }
 
     }

@@ -119,13 +119,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MenuItemBeverage.cs" />
     <Compile Include="ChickenOrder.cs" />
     <Compile Include="EggOrder.cs" />
     <Compile Include="EmployeeCook.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MenuItem.cs" />
+    <Compile Include="MenuItemMainCourse.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EmployeeServer.cs" />

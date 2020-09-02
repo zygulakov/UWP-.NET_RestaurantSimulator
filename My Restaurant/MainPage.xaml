@@ -18,12 +18,7 @@
         <TextBox x:Name="Results" HorizontalAlignment="Left" Margin="43,440,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Height="100" Width="645"/>
         <TextBlock HorizontalAlignment="Left" Margin="130,69,0,0" Text="How many chicken?" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="130,107,0,0" Text="How many egg?" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <ComboBox x:Name="DrinksList" Margin="367,77,0,0" Width="133" PlaceholderText="Drinks" >
-            <ComboBoxItem Content="Juice"/>
-            <ComboBoxItem Content="Fanta"/>
-            <ComboBoxItem Content="Tea"/>
-            <ComboBoxItem Content="NoDrink"/>
-        </ComboBox>
+        <ComboBox x:Name="DrinksList" Margin="367,77,0,0" Width="133" PlaceholderText="Drinks" />
         <TextBox x:Name="amountOfChicken" HorizontalAlignment="Left" Margin="273,62,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" InputScope="Digits"/>
         <TextBox x:Name="amountOfEgg" HorizontalAlignment="Left" Margin="273,100,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" InputScope="Digits"/>
         <Button x:Name="ServePreparedFoodToTheCustomer" Content="Serve prepared food to the Customers" Margin="43,360,0,0" VerticalAlignment="Top" Width="643" Click="ServePreparedFoodToTheCustomer_Click"/>
