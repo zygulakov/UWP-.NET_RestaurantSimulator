@@ -1,7 +1,6 @@
 ﻿using System;
 namespace My_Restaurant
 {
-    //TODO: Please use private, protected for some methods
     class EggOrder : Order
     {
         private int? quality;

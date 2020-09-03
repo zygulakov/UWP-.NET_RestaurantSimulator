@@ -55,11 +55,12 @@ namespace My_Restaurant
             return $"Recieved from customer {ordersCount} :  {eggQuantity} egg, {chickenQuantity} chicken and {drink}";
         }
         public string SendReqToCook()
-        {  //TODO: Create Serve() method in this class and move some code to that Serve method*
+        {
             if (!isTherNewReq)
                 throw new Exception("NO REQUEST TO SEND TO COOK");
 
-            for (int i = 0 ; i < ordersCount; i++)
+            //TODO: You should call SubmitRequest method only one time for Egg and one for Chicken. Call PrepareFood method right after each SubmitRequest method
+            for (int i = 0; i < ordersCount; i++)
             {
                 int chickenCount = 0;
                 int eggCount = 0;
@@ -85,11 +86,7 @@ namespace My_Restaurant
                 ordersToServe[i] = employeeCook.SubmitRequest(eggCount, MenuItemMainCourse.Egg);
                 //chicken
                 //starting from where egg orders end
-                ordersToServe[ordersCount+i] = employeeCook.SubmitRequest(chickenCount, MenuItemMainCourse.Chicken);
-
-
-
-
+                ordersToServe[ordersCount + i] = employeeCook.SubmitRequest(chickenCount, MenuItemMainCourse.Chicken);
             }
             isTherNewReq = false;
             return "request has been sent! please wait!";
@@ -101,7 +98,7 @@ namespace My_Restaurant
             for (int i = 0; i < ordersCount; i++)
             {
                 Order egg = (Order)ordersToServe[i];
-                Order chicken = (Order)ordersToServe[ordersCount+i];
+                Order chicken = (Order)ordersToServe[ordersCount + i];
                 employeeCook.PrepareFood(egg);
                 employeeCook.PrepareFood(chicken);
 
