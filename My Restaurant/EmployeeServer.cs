@@ -5,23 +5,19 @@ namespace My_Restaurant
 
     class EmployeeServer
     {
-        private EmployeeCook employeeCook;
-
+        //array of menuItemMainCourse and MenuItemBeverage array
         private object[][] customersOrders;
-        private Order[] ordersToServe;
-        private MenuItemBeverage[] beverages;
+        private string[] resultOfOrdersToServe;
 
         private int ordersCount;
         private const int MAX_ORDERS = 8;
-        private bool isTherNewReq;
+        private bool isTherNewReq, anythingToServe;
         public EmployeeServer()
         {
-            employeeCook = new EmployeeCook();
             customersOrders = new object[MAX_ORDERS][];
-            //for evert customer 2 menu item
-            ordersToServe = new Order[MAX_ORDERS * 2];
-            beverages = new MenuItemBeverage[MAX_ORDERS];
+            resultOfOrdersToServe = new string[MAX_ORDERS];
         }
+
         public string RecieveRequest(int eggQuantity, int chickenQuantity, MenuItemBeverage drink)
         {
             isTherNewReq = true;
@@ -31,7 +27,7 @@ namespace My_Restaurant
                 throw new Exception($"Sorry i can remember only {MAX_ORDERS} orders");
             }
 
-            //array of order
+            //array of menuItemMainCourse and +1 MenuItemBeverage array
             object[] order = new object[eggQuantity + chickenQuantity + 1];
 
             //adding eggs
@@ -54,16 +50,17 @@ namespace My_Restaurant
             ordersCount++;
             return $"Recieved from customer {ordersCount} :  {eggQuantity} egg, {chickenQuantity} chicken and {drink}";
         }
-        public string SendReqToCook()
+        public string SendReqToCook(EmployeeCook employeeCook)
         {
             if (!isTherNewReq)
                 throw new Exception("NO REQUEST TO SEND TO COOK");
 
-            //TODO: You should call SubmitRequest method only one time for Egg and one for Chicken. Call PrepareFood method right after each SubmitRequest method
+            //TODO: You should call SubmitRequest method only one time for Egg and one for Chicken. Call PrepareFood method right after each SubmitRequest method*
             for (int i = 0; i < ordersCount; i++)
             {
                 int chickenCount = 0;
                 int eggCount = 0;
+                string drinkResult = null;
                 //getting each order from array of orders
                 object[] order = customersOrders[i];
 
@@ -79,36 +76,29 @@ namespace My_Restaurant
                             eggCount++;
                     }
                     else
-                        beverages[i] = prepareDrink((MenuItemBeverage)order[j]);
+                        drinkResult = prepareDrink((MenuItemBeverage)order[j]).ToString();
                 }
                 //egg
-                //from 0 till number of orders
-                ordersToServe[i] = employeeCook.SubmitRequest(eggCount, MenuItemMainCourse.Egg);
+                employeeCook.SubmitRequest(eggCount, MenuItemMainCourse.Egg);
+                string eggResult = employeeCook.PrepareFood();
                 //chicken
-                //starting from where egg orders end
-                ordersToServe[ordersCount + i] = employeeCook.SubmitRequest(chickenCount, MenuItemMainCourse.Chicken);
+                employeeCook.SubmitRequest(chickenCount, MenuItemMainCourse.Chicken);
+                string chickenResult = employeeCook.PrepareFood();
+
+                string orderResult = $"Customer {i+1} is server: {eggResult} , {chickenResult} and {drinkResult}";
+                resultOfOrdersToServe[i] = orderResult;
             }
             isTherNewReq = false;
-            return "request has been sent! please wait!";
+            anythingToServe = true;
+            return "Cooking! ...";
         }
         public string[] Serve()
         {
-            string[] result = new string[ordersToServe.Length];
-
-            for (int i = 0; i < ordersCount; i++)
-            {
-                Order egg = (Order)ordersToServe[i];
-                Order chicken = (Order)ordersToServe[ordersCount + i];
-                employeeCook.PrepareFood(egg);
-                employeeCook.PrepareFood(chicken);
-
-                result[i] = $"Customer {i + 1} is served: {egg.GetQuantity()} {egg} , " +
-                    $"{chicken.GetQuantity()} {chicken} , {beverages[i]}";
-
-            }
-            //moving to other table
+            if (!anythingToServe)
+                throw new Exception("Nothing to Serve");
+            anythingToServe = false;
             ordersCount = 0;
-            return result;
+            return resultOfOrdersToServe;
         }
         private MenuItemBeverage prepareDrink(MenuItemBeverage beverage)
         {

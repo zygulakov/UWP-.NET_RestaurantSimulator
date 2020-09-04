@@ -54,10 +54,10 @@ namespace My_Restaurant
         {
             try
             {
-                
 
-
-                string result = employeeServer.SendReqToCook();
+                string result = employeeServer.SendReqToCook(employeeCook);
+                int? qualityOfEgg = employeeCook.GetEggQuality();
+                quality.Text = qualityOfEgg+"";
                 Results.Text += result + "\n";
             }
             catch (Exception ex)
@@ -80,7 +80,7 @@ namespace My_Restaurant
             catch (Exception ex)
             {
 
-                Results.Text += ex; 
+                Results.Text += ex.Message + "\n"; 
             }
         }
     }
