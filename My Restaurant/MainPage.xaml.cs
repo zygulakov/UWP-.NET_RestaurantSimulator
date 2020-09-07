@@ -1,4 +1,6 @@
-﻿using System;
+﻿using My_Restaurant.Food;
+using System;
+using System.Linq;
 using Windows.Security.Cryptography.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -19,8 +21,11 @@ namespace My_Restaurant
             this.InitializeComponent();
             employeeServer = new EmployeeServer();
             employeeCook = new EmployeeCook();
-            foreach (MenuItemBeverage drink in Enum.GetValues(typeof(MenuItemBeverage)))
-                DrinksList.Items.Add(drink);
+                DrinksList.Items.Add(new Tea());
+                DrinksList.Items.Add(new CocaCola());
+                DrinksList.Items.Add(new Pepsi());
+                DrinksList.Items.Add(new NoDrink());
+            DrinksList.SelectedItem = DrinksList.Items[0];
 
         }
 
@@ -30,10 +35,13 @@ namespace My_Restaurant
             {
                 int eggQuantitiy = int.Parse(amountOfEgg.Text);
                 int chickenQuantity = int.Parse(amountOfChicken.Text);
-                MenuItemBeverage drink =(MenuItemBeverage) DrinksList.SelectedItem;
+                Drink drink = (Drink) DrinksList.SelectedItem;
                 
                 string result = employeeServer.RecieveRequest(eggQuantitiy, chickenQuantity, drink);
+                string eggQuality = employeeServer.GetEggQuality()+"";
                 Results.Text += result + "\n";
+                quality.Text = eggQuality;
+
             }
             catch (FormatException)
             {
@@ -56,8 +64,6 @@ namespace My_Restaurant
             {
 
                 string result = employeeServer.SendReqToCook(employeeCook);
-                int? qualityOfEgg = employeeCook.GetEggQuality();
-                quality.Text = qualityOfEgg+"";
                 Results.Text += result + "\n";
             }
             catch (Exception ex)

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace My_Restaurant
+namespace My_Restaurant.Food
 {
-    enum MenuItemMainCourse
+    interface MenuItem
     {
-        Egg, Chicken
+        void Request();
+        void Obtain();
+        void Serve();
     }
 }
