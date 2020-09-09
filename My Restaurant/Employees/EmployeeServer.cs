@@ -71,7 +71,6 @@ namespace My_Restaurant
                         egg = (Egg)order;
                     if (order is Drink)
                         drink = (Drink)order;
-
                 }
                 resultOfServing[i] = $"customer {i} is served: {chicken.Quantitiy} chicken, {egg.Quantitiy} egg, {drink}";
                 

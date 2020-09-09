@@ -29,7 +29,6 @@ namespace My_Restaurant
         public int? GetEggQuality()
         {
             return eggQuality;
-
         }
     }
 }

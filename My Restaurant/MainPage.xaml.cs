@@ -85,7 +85,6 @@ namespace My_Restaurant
             }
             catch (Exception ex)
             {
-
                 Results.Text += ex.Message + "\n"; 
             }
         }
