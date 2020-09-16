@@ -8,17 +8,5 @@ namespace My_Restaurant.Food
 {
     class Tea : Drink
     {
-        public override void Obtain()
-        {
-        }
-
-        public override void Request()
-        {
-        }
-
-        public override void Serve()
-        {
-        }
-
     }
 }

@@ -11,7 +11,7 @@ namespace My_Restaurant.Food
             Quantitiy = quantity;
             
         }
-        public int? GetQuality
+        public int? Quality
         {
             get => quality;
         }
@@ -30,21 +30,19 @@ namespace My_Restaurant.Food
             
         }
 
-        public override void Request()
-        {
-        }
-
-        public override void Obtain()
-        {
-        }
-
-        public override void Serve()
-        {
-        }
-
         public void Dispose()
         {
             DiscardShell();
+        }
+
+        public override IMenuItem Obtain()
+        {
+            return this;
+        }
+
+        public override IMenuItem Serve()
+        {
+            return this;
         }
     }
 }

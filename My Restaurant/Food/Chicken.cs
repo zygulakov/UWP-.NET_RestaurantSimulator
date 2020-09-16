@@ -18,16 +18,14 @@ namespace My_Restaurant.Food
             }
         }
 
-        public override void Request()
+        public override IMenuItem Obtain()
         {
+            return this;
         }
 
-        public override void Obtain()
+        public override IMenuItem Serve()
         {
-        }
-
-        public override void Serve()
-        {
+            return this;
         }
     }
 }

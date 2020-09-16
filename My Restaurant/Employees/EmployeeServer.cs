@@ -24,17 +24,17 @@ namespace My_Restaurant
             {
                 throw new Exception($"Sorry i can remember only {MAX_ORDERS} orders");
             }
-            if (eggQuantity > 0)
-            {
-                Egg egg = new Egg(eggQuantity);
-                tableOfRequests.Add(ordersCount, egg);
-                eggQuality = egg.GetQuality;
-            }
-            if (chickenQuantity > 0)
-            {
-                Chicken chicken = new Chicken(chickenQuantity);
-                tableOfRequests.Add(ordersCount, chicken);
-            }
+            if (eggQuantity < 0 || chickenQuantity < 0)
+                throw new ArgumentException("order cant be smaller then 0");
+
+            Egg egg = new Egg(eggQuantity);
+            tableOfRequests.Add(ordersCount, egg);
+            eggQuality = egg.Quality;
+
+
+            Chicken chicken = new Chicken(chickenQuantity);
+            tableOfRequests.Add(ordersCount, chicken);
+
             tableOfRequests.Add(ordersCount, drink);
 
             ordersCount++;
@@ -60,20 +60,21 @@ namespace My_Restaurant
 
             for (int i = 0; i < ordersCount; i++)
             {
-                MenuItem[] orders = tableOfRequests[i];
+                IMenuItem[] orders = tableOfRequests[i];
 
                 Chicken chicken = null;
                 Egg egg = null;
                 Drink drink = null;
-                foreach (MenuItem order in orders)
+                foreach (IMenuItem order in orders)
                 {
                     if (order is Chicken)
-                        chicken = (Chicken)order;
+                        chicken = (Chicken)order.Serve();
                     if (order is Egg)
-                        egg = (Egg)order;
+                        egg = (Egg)order.Serve();
                     if (order is Drink)
-                        drink = (Drink)order;
+                        drink = (Drink)order.Serve();
                 }
+
                 resultOfServing[i] = $"customer {i} is served: {chicken.Quantitiy} chicken, {egg.Quantitiy} egg, {drink}";
 
             }

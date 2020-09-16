@@ -7,16 +7,16 @@ namespace My_Restaurant
     class TableRequests
     {
 
-        private MenuItem[][] items;
+        private IMenuItem[][] items;
         private readonly int MAX_CUSTOMER_QUANTITY;
 
         public TableRequests(int maxCustomerQuantity)
         {
             MAX_CUSTOMER_QUANTITY = maxCustomerQuantity;
-            items = new MenuItem[MAX_CUSTOMER_QUANTITY][];
+            items = new IMenuItem[MAX_CUSTOMER_QUANTITY][];
         }
 
-        public void Add(int customerNumber, MenuItem item)
+        public void Add(int customerNumber, IMenuItem item)
         {
             if (customerNumber > items.Length || customerNumber < 0)
                 throw new ArgumentException($"customer with number : {customerNumber} is invalid");
@@ -25,67 +25,53 @@ namespace My_Restaurant
 
             if (isArrayContainsCustomer(customerNumber))
             {
-                MenuItem[] oldOrders = items[customerNumber];
+                IMenuItem[] orders = items[customerNumber];
                 //new array with extra 1 space for our item;
-                //TODO: https://www.dotnetperls.com/array-resize
-                MenuItem[] newOrders = copyArrayToNewCustomSizeArray(oldOrders, oldOrders.Length + 1);
+                //TODO: https://www.dotnetperls.com/array-resize****
+                //IMenuItem[] newOrders = copyArrayToNewCustomSizeArray(oldOrders, oldOrders.Length + 1);
+                Array.Resize(ref orders, orders.Length + 1);
                 //adding item as last element;
-                newOrders[newOrders.Length - 1] = item;
+                orders[orders.Length - 1] = item;
                 //putting back newOrders array to customers number place
-                items[customerNumber] = newOrders;
+                items[customerNumber] = orders;
             }
             else
             {
                 int lastIndex = getLastCustomerIndex(items);
                 //adding new array of item after last element
-                items[lastIndex + 1] = new MenuItem[] { item };
+                items[lastIndex + 1] = new IMenuItem[] { item };
             }
         }
 
         //indexers
-        public MenuItem[] this[Type type]
+        public IMenuItem[] this[Type type]
         {
-            //TODO: This method is little bit long and it has some extra code. You can refactor to make it small enought.
+            //TODO: This method is little bit long and it has some extra code. You can refactor to make it small enought.****
             get
             {
-                //TODO: Maybe we don't need couting numbers part part of the code because you can use dynamic array here. Increasing size of the array sequentially can help here.
-                int numberOfSameType = 0;
-                // counting number of same types
-                for (int i = 0; i < items.GetLength(0); i++)
-                {
-                    MenuItem[] orders = items[i];
-                    if (orders != null)
-                    {
-                        for (int j = 0; j < orders.Length; j++)
-                        {
-                            MenuItem order = orders[j];
-                            if (order != null)
-                            {
-                                if (order.GetType() == type)
-                                    numberOfSameType++;
-                            }
-                        }
-                    }
+                //TODO: Maybe we don't need couting numbers part part of the
+                //code because you can use dynamic array here. Increasing 
+                //size of the array sequentially can help here.****
 
-                }
-
-                //new array
-                MenuItem[] sameItems = new MenuItem[numberOfSameType];
+                //new array with minimal amount
+                IMenuItem[] sameItems = new IMenuItem[0];
 
                 //adding all same types to the new array
                 for (int i = 0; i < items.GetLength(0); i++)
                 {
-                    MenuItem[] orders = items[i];
+                    IMenuItem[] orders = items[i];
                     if (orders != null)
                     {
                         for (int j = 0; j < orders.Length; j++)
                         {
-                            MenuItem order = orders[j];
-                            if (order != null) //TODO: You don't need to check the order with null because you are not adding null.
+                            IMenuItem order = orders[j];
+
+                            if (order.GetType() == type)
                             {
-                                if (order.GetType() == type)
-                                    sameItems[--numberOfSameType] = order;
+                                Array.Resize(ref sameItems, sameItems.Length + 1);
+                                sameItems[sameItems.Length-1] = order;
                             }
+
                         }
                     }
 
@@ -94,11 +80,13 @@ namespace My_Restaurant
             }
         }
 
-        //TODO: Handle an expection when occur after giving customer number that is not between 1-8.
-        public MenuItem[] this[int customer]
+        //TODO: Handle an expection when occur after giving customer number that is not between 1-8.***
+        public IMenuItem[] this[int customer]
         {
             get
             {
+                if (customer >7 || customer < 0)
+                    throw new ArgumentException("invalid customer number");
                 return items[customer];
             }
         }
@@ -111,27 +99,17 @@ namespace My_Restaurant
         }
 
         //returns last index where element is not null for array arg
-        private int getLastCustomerIndex(MenuItem[][] items)
+        private int getLastCustomerIndex(IMenuItem[][] items)
         {
             int lastIndex = -1;
             for (int i = 0; i < items.GetLength(0); i++)
             {
-                MenuItem[] orders = items[i];
+                IMenuItem[] orders = items[i];
                 if (orders != null)
                     lastIndex = i;
             }
 
             return lastIndex;
-        }
-
-        private MenuItem[] copyArrayToNewCustomSizeArray(MenuItem[] arrayToCopy, int newArraySize)
-        {
-            MenuItem[] newArray = new MenuItem[newArraySize];
-            for (int i = 0; i < arrayToCopy.Length; i++)
-            {
-                newArray[i] = arrayToCopy[i];
-            }
-            return newArray;
         }
 
     }

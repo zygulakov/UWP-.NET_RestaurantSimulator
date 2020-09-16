@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace My_Restaurant.Food
 {
-    abstract class Drink : MenuItem
+    abstract class Drink : IMenuItem
     {
-        public abstract void Obtain();
-        public abstract void Request();
-        public abstract void Serve();
+        public IMenuItem Obtain() { return this; }
+        public IMenuItem Serve() { return this; }
 
         public override string ToString()
         {

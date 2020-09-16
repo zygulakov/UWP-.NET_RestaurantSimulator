@@ -8,20 +8,7 @@ namespace My_Restaurant.Food
 {
     class NoDrink : Drink
     {
-        //TODO: Obtain and Serve methods should return itself (this).
-        public override void Obtain()
-        {
-          
-        }
-
-        public override void Request()
-        {
-           
-        }
-
-        public override void Serve()
-        {
-            
-        }
+        //TODO: Obtain and Serve methods should return itself (this).***
+  
     }
 }
