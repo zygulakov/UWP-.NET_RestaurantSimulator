@@ -15,6 +15,7 @@ namespace My_Restaurant
             MAX_CUSTOMER_QUANTITY = maxCustomerQuantity;
             items = new MenuItem[MAX_CUSTOMER_QUANTITY][];
         }
+
         public void Add(int customerNumber, MenuItem item)
         {
             if (customerNumber > items.Length || customerNumber < 0)
@@ -26,13 +27,12 @@ namespace My_Restaurant
             {
                 MenuItem[] oldOrders = items[customerNumber];
                 //new array with extra 1 space for our item;
+                //TODO: https://www.dotnetperls.com/array-resize
                 MenuItem[] newOrders = copyArrayToNewCustomSizeArray(oldOrders, oldOrders.Length + 1);
                 //adding item as last element;
                 newOrders[newOrders.Length - 1] = item;
                 //putting back newOrders array to customers number place
                 items[customerNumber] = newOrders;
-
-
             }
             else
             {
@@ -40,26 +40,26 @@ namespace My_Restaurant
                 //adding new array of item after last element
                 items[lastIndex + 1] = new MenuItem[] { item };
             }
-
-
-
         }
+
         //indexers
         public MenuItem[] this[Type type]
         {
+            //TODO: This method is little bit long and it has some extra code. You can refactor to make it small enought.
             get
             {
+                //TODO: Maybe we don't need couting numbers part part of the code because you can use dynamic array here. Increasing size of the array sequentially can help here.
                 int numberOfSameType = 0;
                 // counting number of same types
                 for (int i = 0; i < items.GetLength(0); i++)
                 {
                     MenuItem[] orders = items[i];
-                    if(orders !=null)
+                    if (orders != null)
                     {
                         for (int j = 0; j < orders.Length; j++)
                         {
                             MenuItem order = orders[j];
-                            if(order != null)
+                            if (order != null)
                             {
                                 if (order.GetType() == type)
                                     numberOfSameType++;
@@ -81,7 +81,7 @@ namespace My_Restaurant
                         for (int j = 0; j < orders.Length; j++)
                         {
                             MenuItem order = orders[j];
-                            if (order != null)
+                            if (order != null) //TODO: You don't need to check the order with null because you are not adding null.
                             {
                                 if (order.GetType() == type)
                                     sameItems[--numberOfSameType] = order;
@@ -92,9 +92,9 @@ namespace My_Restaurant
                 }
                 return sameItems;
             }
-
         }
 
+        //TODO: Handle an expection when occur after giving customer number that is not between 1-8.
         public MenuItem[] this[int customer]
         {
             get
@@ -103,14 +103,13 @@ namespace My_Restaurant
             }
         }
 
-
-
         private bool isArrayContainsCustomer(int customerNumber)
         {
             if (customerNumber >= MAX_CUSTOMER_QUANTITY)
                 throw new ArgumentException("too much customer for the specified amount");
             return items[customerNumber] != null;
         }
+
         //returns last index where element is not null for array arg
         private int getLastCustomerIndex(MenuItem[][] items)
         {
@@ -124,6 +123,7 @@ namespace My_Restaurant
 
             return lastIndex;
         }
+
         private MenuItem[] copyArrayToNewCustomSizeArray(MenuItem[] arrayToCopy, int newArraySize)
         {
             MenuItem[] newArray = new MenuItem[newArraySize];

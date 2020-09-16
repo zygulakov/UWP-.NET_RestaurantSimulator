@@ -3,8 +3,7 @@
 namespace My_Restaurant.Food
 {
     abstract class CookedFood : MenuItem
-    {
-        
+    {        
         public int Quantitiy
         {
             get;

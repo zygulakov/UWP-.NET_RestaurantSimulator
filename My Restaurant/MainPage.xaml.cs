@@ -21,10 +21,10 @@ namespace My_Restaurant
             this.InitializeComponent();
             employeeServer = new EmployeeServer();
             employeeCook = new EmployeeCook();
-                DrinksList.Items.Add(new Tea());
-                DrinksList.Items.Add(new CocaCola());
-                DrinksList.Items.Add(new Pepsi());
-                DrinksList.Items.Add(new NoDrink());
+            DrinksList.Items.Add(new Tea());
+            DrinksList.Items.Add(new CocaCola());
+            DrinksList.Items.Add(new Pepsi());
+            DrinksList.Items.Add(new NoDrink());
             DrinksList.SelectedItem = DrinksList.Items[0];
 
         }
@@ -35,10 +35,10 @@ namespace My_Restaurant
             {
                 int eggQuantitiy = int.Parse(amountOfEgg.Text);
                 int chickenQuantity = int.Parse(amountOfChicken.Text);
-                Drink drink = (Drink) DrinksList.SelectedItem;
-                
+                Drink drink = (Drink)DrinksList.SelectedItem;
+
                 string result = employeeServer.RecieveRequest(eggQuantitiy, chickenQuantity, drink);
-                string eggQuality = employeeServer.GetEggQuality()+"";
+                string eggQuality = employeeServer.GetEggQuality() + "";
                 Results.Text += result + "\n";
                 quality.Text = eggQuality;
 
@@ -55,14 +55,12 @@ namespace My_Restaurant
             {
                 Results.Text += ex.Message + "\n";
             }
-
         }
 
         private void SendAllCustomerReqToCook_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-
                 string result = employeeServer.SendReqToCook(employeeCook);
                 Results.Text += result + "\n";
             }
@@ -85,7 +83,7 @@ namespace My_Restaurant
             }
             catch (Exception ex)
             {
-                Results.Text += ex.Message + "\n"; 
+                Results.Text += ex.Message + "\n";
             }
         }
     }

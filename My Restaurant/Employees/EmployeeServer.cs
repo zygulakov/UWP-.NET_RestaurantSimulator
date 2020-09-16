@@ -40,6 +40,7 @@ namespace My_Restaurant
             ordersCount++;
             return $"Recieved from customer {ordersCount} :  {eggQuantity} egg, {chickenQuantity} chicken and {drink}";
         }
+
         public string SendReqToCook(EmployeeCook employeeCook)
         {
             if (!isTherNewReq)
@@ -50,12 +51,13 @@ namespace My_Restaurant
             anythingToServe = true;
             return "Cooking! ...";
         }
+
         public string[] Serve()
         {
             string[] resultOfServing = new string[ordersCount];
             if (!anythingToServe)
                 throw new Exception("Nothing to Serve");
-            
+
             for (int i = 0; i < ordersCount; i++)
             {
                 MenuItem[] orders = tableOfRequests[i];
@@ -73,16 +75,16 @@ namespace My_Restaurant
                         drink = (Drink)order;
                 }
                 resultOfServing[i] = $"customer {i} is served: {chicken.Quantitiy} chicken, {egg.Quantitiy} egg, {drink}";
-                
+
             }
             anythingToServe = false;
             ordersCount = 0;
             return resultOfServing;
         }
+
         public int? GetEggQuality()
         {
             return eggQuality;
         }
-
     }
 }
