@@ -12,8 +12,12 @@ namespace My_Restaurant
         }
         public void Process(TableRequests tableRequests)
         {
-            //TODO: You can make the method as sample by using typeof(CookedFood) and only one foreach. You can create static property for egg quality.
-            //Chicken*******
+            /*
+             * TODO:You can make the method as sample by using typeof(CookedFood) and only one foreach.
+             * You can create static property for egg quality ****.
+             */
+             
+            // Chicken
             IMenuItem[] orders = tableRequests[typeof(CookedFood)];
             foreach (IMenuItem order in orders)
             {

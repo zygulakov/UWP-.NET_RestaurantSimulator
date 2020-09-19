@@ -18,15 +18,14 @@ namespace My_Restaurant
 
         public string RecieveRequest(int eggQuantity, int chickenQuantity, Drink drink)
         {
-            isTherNewReq = true;
 
             if (ordersCount >= MAX_ORDERS)
-            {
                 throw new Exception($"Sorry i can remember only {MAX_ORDERS} orders");
-            }
+
             if (eggQuantity < 0 || chickenQuantity < 0)
                 throw new ArgumentException("order cant be smaller then 0");
 
+            isTherNewReq = true;
             Egg egg = new Egg(eggQuantity);
             tableOfRequests.Add(ordersCount, egg);
             eggQuality = egg.Quality;

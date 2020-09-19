@@ -26,13 +26,12 @@ namespace My_Restaurant
             if (isArrayContainsCustomer(customerNumber))
             {
                 IMenuItem[] orders = items[customerNumber];
-                //new array with extra 1 space for our item;
+                //resize array with extra 1 space for our item;
                 //TODO: https://www.dotnetperls.com/array-resize****
-                //IMenuItem[] newOrders = copyArrayToNewCustomSizeArray(oldOrders, oldOrders.Length + 1);
                 Array.Resize(ref orders, orders.Length + 1);
                 //adding item as last element;
                 orders[orders.Length - 1] = item;
-                //putting back newOrders array to customers number place
+                //putting back resized array to customers number place
                 items[customerNumber] = orders;
             }
             else

@@ -3,17 +3,17 @@ namespace My_Restaurant.Food
 {
     sealed class Egg : CookedFood ,IDisposable
     {
-        private int? quality;
         public Egg(int quantity)
         {
             Random randQuality = new Random();
-            quality = randQuality.Next(101);
+            Quality = randQuality.Next(101);
             Quantitiy = quantity;
             
         }
         public int? Quality
         {
-            get => quality;
+            get;
+            private set;
         }
         private void Crack()
         {

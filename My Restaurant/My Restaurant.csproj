@@ -122,10 +122,10 @@
     <Compile Include="Food\CocaCola.cs" />
     <Compile Include="Food\CookedFood.cs" />
     <Compile Include="Food\Drink.cs" />
-    <Compile Include="Food\MenuItem.cs" />
     <Compile Include="Food\Chicken.cs" />
     <Compile Include="Food\Egg.cs" />
     <Compile Include="Employees\EmployeeCook.cs" />
+    <Compile Include="Food\IMenuItem.cs" />
     <Compile Include="Food\NoDrink.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
