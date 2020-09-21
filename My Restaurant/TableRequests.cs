@@ -27,7 +27,6 @@ namespace My_Restaurant
             {
                 IMenuItem[] orders = items[customerNumber];
                 //resize array with extra 1 space for our item;
-                //TODO: https://www.dotnetperls.com/array-resize****
                 Array.Resize(ref orders, orders.Length + 1);
                 //adding item as last element;
                 orders[orders.Length - 1] = item;
@@ -45,13 +44,8 @@ namespace My_Restaurant
         //indexers
         public IMenuItem[] this[Type type]
         {
-            //TODO: This method is little bit long and it has some extra code. You can refactor to make it small enought.****
             get
             {
-                //TODO: Maybe we don't need couting numbers part part of the
-                //code because you can use dynamic array here. Increasing 
-                //size of the array sequentially can help here.****
-
                 //new array with minimal amount
                 IMenuItem[] sameItems = new IMenuItem[0];
 
@@ -79,7 +73,6 @@ namespace My_Restaurant
             }
         }
 
-        //TODO: Handle an expection when occur after giving customer number that is not between 1-8.***
         public IMenuItem[] this[int customer]
         {
             get
