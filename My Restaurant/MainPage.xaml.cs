@@ -58,22 +58,21 @@ namespace My_Restaurant
             }
             catch (Exception ex)
             {
-                Results.Text += ex.Message +"\n";
+                Results.Text += ex.Message + "\n";
             }
         }
 
         private void SendAllCustomerReqToCook_Click(object sender, RoutedEventArgs e)
         {
+            //TODO: Subscribing part should go to the MainPage method. You don't need to subscriber to the events each time when sending requests, but it should be done only once.
             try
             {
                 // subscribing Servers's ready event
                 employeeServer.Ready += employeeCook.Process;
                 //subscribing Cook's ProcessedEvent event
-                employeeCook.ProcessedEvent += (() => employeeServer.CanServe());
+                employeeCook.Processed += (() => employeeServer.CanServe()); //TODO: server.Serve() should be subscribed
                 string resultOfCook = employeeServer.NotifyToCook();
                 Results.Text += resultOfCook + "\n";
-             
-
             }
             catch (Exception ex)
             {

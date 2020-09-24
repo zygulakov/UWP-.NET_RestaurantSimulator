@@ -68,6 +68,7 @@ namespace App.My_Restaurant.Employees
             foreach (IMenuItem order in tableOfRequests)
                 order.Serve();
 
+            //TODO: Refactor this code to be smaller
             int TeaCount = tableOfRequests.GetOrdersByType<Tea>().Count;
             int PepsiCount = tableOfRequests.GetOrdersByType<Pepsi>().Count;
             int CocaColaCount = tableOfRequests.GetOrdersByType<CocaCola>().Count;

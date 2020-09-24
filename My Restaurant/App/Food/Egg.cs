@@ -1,14 +1,14 @@
 ﻿using System;
 namespace App.My_Restaurant.Food
 {
-    sealed class Egg : CookedFood ,IDisposable
+    sealed class Egg : CookedFood, IDisposable
     {
         public Egg(int quantity)
         {
             Random randQuality = new Random();
             Quality = randQuality.Next(101);
             Quantitiy = quantity;
-            
+
         }
         public static int? Quality
         {
@@ -27,9 +27,10 @@ namespace App.My_Restaurant.Food
             {
                 Crack();
             }
-            
+
         }
 
+        //TODO: Where this method will be called?
         public void Dispose()
         {
             DiscardShell();
