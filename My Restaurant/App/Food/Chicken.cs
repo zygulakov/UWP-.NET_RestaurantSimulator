@@ -1,5 +1,5 @@
 ﻿
-namespace My_Restaurant.Food
+namespace App.My_Restaurant.Food
 {
     sealed class Chicken : CookedFood
     {

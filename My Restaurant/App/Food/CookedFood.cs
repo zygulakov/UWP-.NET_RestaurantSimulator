@@ -1,6 +1,6 @@
 ﻿
 
-namespace My_Restaurant.Food
+namespace App.My_Restaurant.Food
 {
     abstract class CookedFood : IMenuItem
     {
@@ -12,6 +12,12 @@ namespace My_Restaurant.Food
         public abstract void Cook();
         public abstract IMenuItem Obtain();
         public abstract IMenuItem Serve();
+
+        public override string ToString()
+        {
+            return $"{this.Quantitiy} {this.GetType().Name}";
+        }
     }
+    
 
 }

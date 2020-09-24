@@ -119,22 +119,22 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Food\CocaCola.cs" />
-    <Compile Include="Food\CookedFood.cs" />
-    <Compile Include="Food\Drink.cs" />
-    <Compile Include="Food\Chicken.cs" />
-    <Compile Include="Food\Egg.cs" />
-    <Compile Include="Employees\EmployeeCook.cs" />
-    <Compile Include="Food\IMenuItem.cs" />
-    <Compile Include="Food\NoDrink.cs" />
+    <Compile Include="App\Food\CocaCola.cs" />
+    <Compile Include="App\Food\CookedFood.cs" />
+    <Compile Include="App\Food\Drink.cs" />
+    <Compile Include="App\Food\Chicken.cs" />
+    <Compile Include="App\Food\Egg.cs" />
+    <Compile Include="App\Employees\EmployeeCook.cs" />
+    <Compile Include="App\Food\IMenuItem.cs" />
+    <Compile Include="App\Food\NoDrink.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Food\Pepsi.cs" />
-    <Compile Include="Food\Tea.cs" />
+    <Compile Include="App\Food\Pepsi.cs" />
+    <Compile Include="App\Food\Tea.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Employees\EmployeeServer.cs" />
-    <Compile Include="TableRequests.cs" />
+    <Compile Include="App\Employees\EmployeeServer.cs" />
+    <Compile Include="App\Table\TableRequests.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

@@ -1,5 +1,5 @@
 ﻿using System;
-namespace My_Restaurant.Food
+namespace App.My_Restaurant.Food
 {
     sealed class Egg : CookedFood ,IDisposable
     {
@@ -10,7 +10,7 @@ namespace My_Restaurant.Food
             Quantitiy = quantity;
             
         }
-        public int? Quality
+        public static int? Quality
         {
             get;
             private set;

@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace My_Restaurant.Food
+namespace App.My_Restaurant.Food
 {
-    interface IMenuItem
-    { 
-        IMenuItem Obtain();
-        IMenuItem Serve();
+    class Pepsi : Drink
+    {
     }
 }

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace My_Restaurant.Food
+namespace App.My_Restaurant.Food
 {
-    class Pepsi : Drink
+    class NoDrink : Drink
     {
+        //TODO: Obtain and Serve methods should return itself (this).***
+  
     }
 }

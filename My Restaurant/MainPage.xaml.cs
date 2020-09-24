@@ -1,9 +1,11 @@
-﻿using My_Restaurant.Food;
+﻿using App.My_Restaurant.Food;
+using App.My_Restaurant.Employees;
 using System;
 using System.Linq;
-using Windows.Security.Cryptography.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using App.My_Restaurant.Table;
+using System.Collections.Generic;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -16,6 +18,7 @@ namespace My_Restaurant
     {
         private EmployeeServer employeeServer;
         private EmployeeCook employeeCook;
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -36,11 +39,13 @@ namespace My_Restaurant
                 int eggQuantitiy = int.Parse(amountOfEgg.Text);
                 int chickenQuantity = int.Parse(amountOfChicken.Text);
                 Drink drink = (Drink)DrinksList.SelectedItem;
+                string name = CustomerName.Text;
 
-                string result = employeeServer.RecieveRequest(eggQuantitiy, chickenQuantity, drink);
-                string eggQuality = employeeServer.GetEggQuality() + "";
+                string result = employeeServer.RecieveRequest(eggQuantitiy, chickenQuantity, drink, name);
+
                 Results.Text += result + "\n";
-                quality.Text = eggQuality;
+                quality.Text = Egg.Quality + "";
+
 
             }
             catch (FormatException)
@@ -53,7 +58,7 @@ namespace My_Restaurant
             }
             catch (Exception ex)
             {
-                Results.Text += ex.Message + "\n";
+                Results.Text += ex.Message +"\n";
             }
         }
 
@@ -61,8 +66,14 @@ namespace My_Restaurant
         {
             try
             {
-                string result = employeeServer.SendReqToCook(employeeCook);
-                Results.Text += result + "\n";
+                // subscribing Servers's ready event
+                employeeServer.Ready += employeeCook.Process;
+                //subscribing Cook's ProcessedEvent event
+                employeeCook.ProcessedEvent += (() => employeeServer.CanServe());
+                string resultOfCook = employeeServer.NotifyToCook();
+                Results.Text += resultOfCook + "\n";
+             
+
             }
             catch (Exception ex)
             {
@@ -74,8 +85,8 @@ namespace My_Restaurant
         {
             try
             {
-                string[] resultsOfServing = employeeServer.Serve();
-                foreach (string result in resultsOfServing)
+                List<string> resultOfServing = employeeServer.Serve();
+                foreach (string result in resultOfServing)
                 {
                     Results.Text += result + "\n";
                 }
