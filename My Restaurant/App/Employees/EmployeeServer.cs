@@ -36,10 +36,11 @@ namespace App.My_Restaurant.Employees
             tableOfRequests.AddFood<Egg>(eggQuantity, customerName);
 
             tableOfRequests.AddFood<Chicken>(chickenQuantity, customerName);
-
+            
             tableOfRequests.AddDrink(drink, customerName);
 
             ordersCount = tableOfRequests.CustomerNameList.Count;
+            anythingToServe = true;
             isTherNewReq = true;
             return $"Recieved from customer({ordersCount}) {customerName} :  {eggQuantity} egg, {chickenQuantity} chicken and {drink}";
         }
@@ -47,7 +48,7 @@ namespace App.My_Restaurant.Employees
         public string NotifyToCook()
         {
             if (!isTherNewReq)
-                throw new Exception("NO REQUEST TO SEND TO COOK");
+                throw new Exception("No request to send to Chef");
 
             isTherNewReq = false;
             // if there is Cooker then cook and return result;
@@ -68,29 +69,13 @@ namespace App.My_Restaurant.Employees
             foreach (IMenuItem order in tableOfRequests)
                 order.Serve();
 
-            //TODO: Refactor this code to be smaller
-            int TeaCount = tableOfRequests.GetOrdersByType<Tea>().Count;
-            int PepsiCount = tableOfRequests.GetOrdersByType<Pepsi>().Count;
-            int CocaColaCount = tableOfRequests.GetOrdersByType<CocaCola>().Count;
-
-            if (TeaCount != 0)
-                resultList.Add($"Served total {TeaCount} Tea");
-
-            if (PepsiCount!= 0)
-                resultList.Add($"Served total {PepsiCount} Pepsi");
-
-            if (CocaColaCount != 0)
-                resultList.Add($"Served total {CocaColaCount} CocaCola");
-
+            //TODO: Refactor this code to be smaller ***
+              
             foreach (string customerName in tableOfRequests.CustomerNameList)
             {
                 List<IMenuItem> orders = tableOfRequests[customerName];
-
-                StringBuilder result = new StringBuilder($"customer {customerName} is served: ");
-                foreach (IMenuItem order in orders)
-                    if (order is CookedFood)
-                        result.Append(order + " ");
-                resultList.Add(result.ToString());
+                string result = printOrders(orders);
+                resultList.Add($"customer {customerName} served: "+result);
             }
 
             anythingToServe = false;
@@ -98,10 +83,22 @@ namespace App.My_Restaurant.Employees
             tableOfRequests.Clear();
             return resultList;
         }
-        public void CanServe()
+        private string printOrders(List<IMenuItem> orders)
         {
-            anythingToServe = true;
+            StringBuilder result = new StringBuilder();
+
+            IMenuItem egg = orders.Find(o => o is Egg);
+            IMenuItem chicken = orders.Find(o => o is Chicken);
+
+            List<IMenuItem> Drinks = orders.FindAll(o => o is Drink).FindAll(o=>!(o is NoDrink));
+            
+            result.Append($"{egg.Quantity} {egg} {chicken.Quantity} {chicken} ");
+            foreach(IMenuItem drink in Drinks)
+                result.Append($"{drink.Quantity} {drink} ");
+            
+            return result.ToString();
         }
+        
 
     }
 }

@@ -8,6 +8,11 @@ namespace App.My_Restaurant.Food
 {
     abstract class Drink : IMenuItem
     {
+        public int Quantity
+        {
+            get;
+            set;
+        }
         public IMenuItem Obtain() { return this; }
         public IMenuItem Serve() { return this; }
 

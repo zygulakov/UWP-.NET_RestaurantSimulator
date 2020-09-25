@@ -11,15 +11,20 @@ namespace App.My_Restaurant.Employees
 
         public string Process(TableRequests tableRequests)
         {
-            //TODO: orders count is always 0 here. Please fix this.
+            //TODO: orders count is always 0 here. Please fix this.***
             List<IMenuItem> orders = tableRequests.GetOrdersByType<CookedFood>();
             foreach (IMenuItem order in orders)
             {
-                ((CookedFood)order.Obtain()).Cook();
+                if (order is Egg egg)
+                    using (egg)
+                        ((CookedFood)egg.Obtain()).Cook();
+                else
+                    ((CookedFood)order.Obtain()).Cook();
             }
             //fires processed event
             Processed.Invoke();
-            return "Got the orders , starting to cook...";
+            return "Cooking ...\n cooked!";
+            
         }
 
     }

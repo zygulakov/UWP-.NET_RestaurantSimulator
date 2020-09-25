@@ -8,5 +8,9 @@ namespace App.My_Restaurant.Food
 {
     class Pepsi : Drink
     {
+        public Pepsi(int quantity)
+        {
+            Quantity = quantity;
+        }
     }
 }

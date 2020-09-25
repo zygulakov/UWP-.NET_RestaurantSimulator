@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 namespace App.My_Restaurant.Food
 {
     interface IMenuItem
-    { 
+    {
+        int Quantity
+        {
+            get;
+            set;
+        }
         IMenuItem Obtain();
         IMenuItem Serve();
     }

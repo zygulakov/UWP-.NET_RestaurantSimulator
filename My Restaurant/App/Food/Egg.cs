@@ -7,7 +7,7 @@ namespace App.My_Restaurant.Food
         {
             Random randQuality = new Random();
             Quality = randQuality.Next(101);
-            Quantitiy = quantity;
+            Quantity = quantity;
 
         }
         public static int? Quality
@@ -23,14 +23,14 @@ namespace App.My_Restaurant.Food
         }
         public override void Cook()
         {
-            for (int i = 0; i < Quantitiy; i++)
+            for (int i = 0; i < Quantity; i++)
             {
                 Crack();
             }
 
         }
 
-        //TODO: Where this method will be called?
+        //TODO: Where this method will be called?***
         public void Dispose()
         {
             DiscardShell();

@@ -18,17 +18,22 @@ namespace My_Restaurant
     {
         private EmployeeServer employeeServer;
         private EmployeeCook employeeCook;
+        private List<string> resutlsOfCooking;
 
         public MainPage()
         {
             this.InitializeComponent();
             employeeServer = new EmployeeServer();
             employeeCook = new EmployeeCook();
-            DrinksList.Items.Add(new Tea());
-            DrinksList.Items.Add(new CocaCola());
-            DrinksList.Items.Add(new Pepsi());
+            employeeServer.Ready += employeeCook.Process;
+            employeeCook.Processed += (() =>resutlsOfCooking =  employeeServer.Serve());
+            
+            DrinksList.Items.Add(new Tea(1));
+            DrinksList.Items.Add(new CocaCola(1));
+            DrinksList.Items.Add(new Pepsi(1));
             DrinksList.Items.Add(new NoDrink());
             DrinksList.SelectedItem = DrinksList.Items[0];
+
 
         }
 
@@ -64,15 +69,17 @@ namespace My_Restaurant
 
         private void SendAllCustomerReqToCook_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: Subscribing part should go to the MainPage method. You don't need to subscriber to the events each time when sending requests, but it should be done only once.
+            /*
+             * TODO: Subscribing part should go to the MainPage method.
+             * You don't need to subscriber to the events each time when sending requests,
+             * but it should be done only once.***
+             */
             try
             {
-                // subscribing Servers's ready event
-                employeeServer.Ready += employeeCook.Process;
-                //subscribing Cook's ProcessedEvent event
-                employeeCook.Processed += (() => employeeServer.CanServe()); //TODO: server.Serve() should be subscribed
-                string resultOfCook = employeeServer.NotifyToCook();
-                Results.Text += resultOfCook + "\n";
+                //TODO: server.Serve() should be subscribed***
+
+                string cookResult = employeeServer.NotifyToCook();
+                Results.Text += cookResult + "\n";
             }
             catch (Exception ex)
             {
@@ -84,11 +91,13 @@ namespace My_Restaurant
         {
             try
             {
-                List<string> resultOfServing = employeeServer.Serve();
-                foreach (string result in resultOfServing)
+                if (resutlsOfCooking == null)
+                    throw new Exception("No food to serve , please order...");
+                foreach (string result in resutlsOfCooking)
                 {
                     Results.Text += result + "\n";
                 }
+                resutlsOfCooking = null;
 
             }
             catch (Exception ex)

@@ -4,7 +4,7 @@ namespace App.My_Restaurant.Food
 {
     abstract class CookedFood : IMenuItem
     {
-        public int Quantitiy
+        public int Quantity
         {
             get;
             set;
@@ -12,10 +12,9 @@ namespace App.My_Restaurant.Food
         public abstract void Cook();
         public abstract IMenuItem Obtain();
         public abstract IMenuItem Serve();
-
         public override string ToString()
         {
-            return $"{this.Quantitiy} {this.GetType().Name}";
+            return this.GetType().Name;
         }
     }
     

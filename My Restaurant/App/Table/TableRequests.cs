@@ -47,7 +47,7 @@ namespace App.My_Restaurant.Table
         {
             IEnumerable<IMenuItem> sameOrders = from orders in items.Values
                                                 from order in orders
-                                                where (order.GetType() == typeof(T))
+                                                where (order is T)
                                                 select order;
 
             return sameOrders.ToList();
@@ -87,23 +87,19 @@ namespace App.My_Restaurant.Table
         {
             if (items.ContainsKey(name))
             {
-                if (newOrder is CookedFood)
+                List<IMenuItem> customerOrders = items[name];
+                for (int i = 0; i < customerOrders.Count; i++)
                 {
-                    List<IMenuItem> customerOrders = items[name];
-                    for (int i = 0; i < customerOrders.Count; i++)
+                    IMenuItem order = customerOrders[i];
+                    if (order.GetType() == newOrder.GetType())
                     {
-                        IMenuItem order = customerOrders[i];
-                        if (order.GetType() == newOrder.GetType())
-                        {
-                            ((CookedFood)order).Quantitiy += ((CookedFood)newOrder).Quantitiy;
-                            return;
-                        }
-                           
+                        order.Quantity += newOrder.Quantity;
+                        return;
                     }
-                    customerOrders.Add(newOrder);
+
                 }
-                else { items[name].Add(newOrder); }
-                
+                customerOrders.Add(newOrder);
+
             }
             else
                 items.Add(name, new List<IMenuItem>() { newOrder });
