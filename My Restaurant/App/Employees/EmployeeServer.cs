@@ -69,8 +69,6 @@ namespace App.My_Restaurant.Employees
             foreach (IMenuItem order in tableOfRequests)
                 order.Serve();
 
-            //TODO: Refactor this code to be smaller ***
-              
             foreach (string customerName in tableOfRequests.CustomerNameList)
             {
                 List<IMenuItem> orders = tableOfRequests[customerName];

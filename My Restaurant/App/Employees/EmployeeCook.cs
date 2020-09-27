@@ -10,8 +10,7 @@ namespace App.My_Restaurant.Employees
         public event ProcessedDelegate Processed;
 
         public string Process(TableRequests tableRequests)
-        {
-            //TODO: orders count is always 0 here. Please fix this.***
+        {            
             List<IMenuItem> orders = tableRequests.GetOrdersByType<CookedFood>();
             foreach (IMenuItem order in orders)
             {

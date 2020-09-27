@@ -8,7 +8,6 @@ namespace App.My_Restaurant.Food
 {
     class NoDrink : Drink
     {
-        //TODO: Obtain and Serve methods should return itself (this).***
   
     }
 }

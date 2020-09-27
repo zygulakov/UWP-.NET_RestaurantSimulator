@@ -68,16 +68,9 @@ namespace My_Restaurant
         }
 
         private void SendAllCustomerReqToCook_Click(object sender, RoutedEventArgs e)
-        {
-            /*
-             * TODO: Subscribing part should go to the MainPage method.
-             * You don't need to subscriber to the events each time when sending requests,
-             * but it should be done only once.***
-             */
+        {           
             try
             {
-                //TODO: server.Serve() should be subscribed***
-
                 string cookResult = employeeServer.NotifyToCook();
                 Results.Text += cookResult + "\n";
             }
