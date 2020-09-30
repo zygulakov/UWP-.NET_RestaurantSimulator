@@ -6,6 +6,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using App.My_Restaurant.Table;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -17,17 +18,20 @@ namespace My_Restaurant
     public sealed partial class MainPage : Page
     {
         private EmployeeServer employeeServer;
-        private EmployeeCook employeeCook;
+        private EmployeeCook employeeCook1;
+        private EmployeeCook employeeCook2;
         private List<string> resutlsOfCooking;
+
+
 
         public MainPage()
         {
             this.InitializeComponent();
             employeeServer = new EmployeeServer();
-            employeeCook = new EmployeeCook();
-            employeeServer.Ready += employeeCook.Process;
-            employeeCook.Processed += (() =>resutlsOfCooking =  employeeServer.Serve());
-            
+            employeeCook1 = new EmployeeCook();
+            employeeCook2 = new EmployeeCook();
+
+
             DrinksList.Items.Add(new Tea(1));
             DrinksList.Items.Add(new CocaCola(1));
             DrinksList.Items.Add(new Pepsi(1));
@@ -46,7 +50,11 @@ namespace My_Restaurant
                 Drink drink = (Drink)DrinksList.SelectedItem;
                 string name = CustomerName.Text;
 
-                string result = employeeServer.RecieveRequest(eggQuantitiy, chickenQuantity, drink, name);
+                string result = default;
+                lock (employeeServer)
+                {
+                       result = employeeServer.RecieveRequest(eggQuantitiy, chickenQuantity, drink, name);
+                }
 
                 Results.Text += result + "\n";
                 quality.Text = Egg.Quality + "";
@@ -67,12 +75,20 @@ namespace My_Restaurant
             }
         }
 
-        private void SendAllCustomerReqToCook_Click(object sender, RoutedEventArgs e)
-        {           
+        private async void SendAllCustomerReqToCook_Click(object sender, RoutedEventArgs e)
+        {
             try
             {
-                string cookResult = employeeServer.NotifyToCook();
-                Results.Text += cookResult + "\n";
+                TableRequests reqTable = employeeServer.tableOfRequests;
+                Results.Text += "Cooking ....."+ "\n";
+                string resultFromCook1 = await employeeCook1.ProcessAsync(reqTable);
+                Results.Text += $"Chef 1 {resultFromCook1}  \n";
+                string resultFromCook2 = await employeeCook2.ProcessAsync(reqTable);
+                Results.Text += $"Chef 2 { resultFromCook2}  \n";
+                resutlsOfCooking = await employeeServer.ServeAsync();
+                Results.Text += "Ready to Serve" + "\n";
+                
+
             }
             catch (Exception ex)
             {

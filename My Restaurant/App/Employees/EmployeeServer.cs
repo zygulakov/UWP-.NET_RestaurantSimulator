@@ -2,7 +2,10 @@
 using App.My_Restaurant.Table;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace App.My_Restaurant.Employees
 {
@@ -11,14 +14,22 @@ namespace App.My_Restaurant.Employees
     {
         private int ordersCount;
         private readonly int MAX_ORDERS;
-        private bool isTherNewReq, anythingToServe;
-        private TableRequests tableOfRequests;
-        public delegate string ReadyDelegate(TableRequests tableOfReq);
-        public event ReadyDelegate Ready;
+        private bool anythingToServe;
+
         public EmployeeServer()
         {
             MAX_ORDERS = 8;
             tableOfRequests = new TableRequests(MAX_ORDERS);
+        }
+        public List<string> ResultList
+        {
+            get;
+            private set;
+        }
+        public TableRequests tableOfRequests
+        {
+            get;
+            private set;
         }
 
         public string RecieveRequest(int eggQuantity, int chickenQuantity, Drink drink, string customerName)
@@ -26,41 +37,25 @@ namespace App.My_Restaurant.Employees
 
             if (ordersCount >= MAX_ORDERS)
                 throw new Exception($"Sorry i can remember only {MAX_ORDERS} orders");
-            
+
 
             if (eggQuantity < 0 || chickenQuantity < 0)
                 throw new ArgumentException("order cant be smaller then 0");
 
-
-            
             tableOfRequests.AddFood<Egg>(eggQuantity, customerName);
 
             tableOfRequests.AddFood<Chicken>(chickenQuantity, customerName);
-            
+
             tableOfRequests.AddDrink(drink, customerName);
 
             ordersCount = tableOfRequests.CustomerNameList.Count;
             anythingToServe = true;
-            isTherNewReq = true;
             return $"Recieved from customer({ordersCount}) {customerName} :  {eggQuantity} egg, {chickenQuantity} chicken and {drink}";
         }
 
-        public string NotifyToCook()
+        public void Serve()
         {
-            if (!isTherNewReq)
-                throw new Exception("No request to send to Chef");
-
-            isTherNewReq = false;
-            // if there is Cooker then cook and return result;
-            if (Ready != null)
-                return Ready(tableOfRequests);
-            else
-                throw new Exception("No chef to cook");
-        }
-
-        public List<string> Serve()
-        {
-            List<string> resultList = new List<string>();
+            ResultList = new List<string>();
             if (!anythingToServe)
                 throw new Exception("Nothing to Serve");
 
@@ -73,13 +68,44 @@ namespace App.My_Restaurant.Employees
             {
                 List<IMenuItem> orders = tableOfRequests[customerName];
                 string result = printOrders(orders);
-                resultList.Add($"customer {customerName} served: "+result);
+                ResultList.Add($"customer {customerName} served: " + result);
             }
 
             anythingToServe = false;
             ordersCount = 0;
             tableOfRequests.Clear();
-            return resultList;
+        }
+        public async Task<List<string>> ServeAsync()
+        {
+
+            await Task.Run(() =>
+            {
+                lock (this)
+                {
+                    ResultList = new List<string>();
+                    if (!anythingToServe)
+                        throw new Exception("Nothing to Serve");
+
+                    //TableRequests enumeration serves drinks first 
+                    //drinks added to resulList to show in dialog box(serving first*)
+                    foreach (IMenuItem order in tableOfRequests)
+                        order.Serve();
+
+                    //ordered by name
+                    foreach (string customerName in tableOfRequests.CustomerNameList.OrderBy(o=>o))
+                    {
+                        List<IMenuItem> orders = tableOfRequests[customerName];
+                        string result = printOrders(orders);
+                        ResultList.Add($"customer {customerName} served: " + result);
+                    }
+
+                    anythingToServe = false;
+                    ordersCount = 0;
+                    tableOfRequests.Clear();
+                    Thread.Sleep(2000);
+                }
+            });
+            return ResultList;
         }
         private string printOrders(List<IMenuItem> orders)
         {
@@ -88,15 +114,15 @@ namespace App.My_Restaurant.Employees
             IMenuItem egg = orders.Find(o => o is Egg);
             IMenuItem chicken = orders.Find(o => o is Chicken);
 
-            List<IMenuItem> Drinks = orders.FindAll(o => o is Drink).FindAll(o=>!(o is NoDrink));
-            
+            List<IMenuItem> Drinks = orders.FindAll(o => o is Drink).FindAll(o => !(o is NoDrink));
+
             result.Append($"{egg.Quantity} {egg} {chicken.Quantity} {chicken} ");
-            foreach(IMenuItem drink in Drinks)
+            foreach (IMenuItem drink in Drinks)
                 result.Append($"{drink.Quantity} {drink} ");
-            
+
             return result.ToString();
         }
-        
+
 
     }
 }
