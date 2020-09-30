@@ -21,6 +21,7 @@ namespace My_Restaurant
         private EmployeeCook employeeCook1;
         private EmployeeCook employeeCook2;
         private List<string> resutlsOfCooking;
+        private bool anythingToCook;
 
 
 
@@ -53,11 +54,12 @@ namespace My_Restaurant
                 string result = default;
                 lock (employeeServer)
                 {
-                       result = employeeServer.RecieveRequest(eggQuantitiy, chickenQuantity, drink, name);
+                    result = employeeServer.RecieveRequest(eggQuantitiy, chickenQuantity, drink, name);
                 }
 
                 Results.Text += result + "\n";
                 quality.Text = Egg.Quality + "";
+                anythingToCook = true;
 
 
             }
@@ -79,15 +81,19 @@ namespace My_Restaurant
         {
             try
             {
+                if (!anythingToCook)
+                    throw new Exception("already served");
                 TableRequests reqTable = employeeServer.tableOfRequests;
-                Results.Text += "Cooking ....."+ "\n";
-                string resultFromCook1 = await employeeCook1.ProcessAsync(reqTable);
-                Results.Text += $"Chef 1 {resultFromCook1}  \n";
-                string resultFromCook2 = await employeeCook2.ProcessAsync(reqTable);
-                Results.Text += $"Chef 2 { resultFromCook2}  \n";
+                Results.Text += "Cooking ....." + "\n";
+                Task<string> t = employeeCook1.ProcessAsync(reqTable);
+                Task<string> t2 = employeeCook2.ProcessAsync(reqTable);
+                await Task.WhenAll(t, t2);
+                Results.Text += "Cooked ....." + "\n";
+
+                Results.Text += "Getting ready to serve ....." + "\n";
                 resutlsOfCooking = await employeeServer.ServeAsync();
                 Results.Text += "Ready to Serve" + "\n";
-                
+                anythingToCook = false;
 
             }
             catch (Exception ex)

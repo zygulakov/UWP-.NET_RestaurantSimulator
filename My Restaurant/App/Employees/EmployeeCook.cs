@@ -25,6 +25,7 @@ namespace App.My_Restaurant.Employees
             return $"Cooked!";
 
         }
+        //async method
         public async Task<string> ProcessAsync(TableRequests tableRequests)
         {
             await Task.Run(() =>
