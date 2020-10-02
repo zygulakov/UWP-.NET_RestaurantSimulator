@@ -23,23 +23,18 @@ namespace My_Restaurant
         private List<string> resutlsOfCooking;
         private bool anythingToCook;
 
-
-
         public MainPage()
         {
             this.InitializeComponent();
             employeeServer = new EmployeeServer();
             employeeCook1 = new EmployeeCook();
             employeeCook2 = new EmployeeCook();
-
-
+            
             DrinksList.Items.Add(new Tea(1));
             DrinksList.Items.Add(new CocaCola(1));
             DrinksList.Items.Add(new Pepsi(1));
             DrinksList.Items.Add(new NoDrink());
             DrinksList.SelectedItem = DrinksList.Items[0];
-
-
         }
 
         private void submitReqButton_Click(object sender, RoutedEventArgs e)
@@ -60,8 +55,6 @@ namespace My_Restaurant
                 Results.Text += result + "\n";
                 quality.Text = Egg.Quality + "";
                 anythingToCook = true;
-
-
             }
             catch (FormatException)
             {
@@ -85,6 +78,7 @@ namespace My_Restaurant
                     throw new Exception("already served");
                 TableRequests reqTable = employeeServer.tableOfRequests;
                 Results.Text += "Cooking ....." + "\n";
+                //TODO: You are giving one tableRequest to 2 cooks. Only one who are free should take the table request to process. 
                 Task<string> t = employeeCook1.ProcessAsync(reqTable);
                 Task<string> t2 = employeeCook2.ProcessAsync(reqTable);
                 await Task.WhenAll(t, t2);
@@ -94,7 +88,6 @@ namespace My_Restaurant
                 resutlsOfCooking = await employeeServer.ServeAsync();
                 Results.Text += "Ready to Serve" + "\n";
                 anythingToCook = false;
-
             }
             catch (Exception ex)
             {
@@ -102,6 +95,7 @@ namespace My_Restaurant
             }
         }
 
+        //TODO: For the project #5 this ServePreparedFoodToTheCustomer button should be deleted from UI. Please review the design again.
         private void ServePreparedFoodToTheCustomer_Click(object sender, RoutedEventArgs e)
         {
             try

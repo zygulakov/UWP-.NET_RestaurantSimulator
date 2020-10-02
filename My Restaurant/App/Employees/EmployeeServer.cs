@@ -53,32 +53,10 @@ namespace App.My_Restaurant.Employees
             return $"Recieved from customer({ordersCount}) {customerName} :  {eggQuantity} egg, {chickenQuantity} chicken and {drink}";
         }
 
-        public void Serve()
-        {
-            ResultList = new List<string>();
-            if (!anythingToServe)
-                throw new Exception("Nothing to Serve");
-
-            //TableRequests enumeration serves drinks first 
-            //drinks added to resulList to show in dialog box(serving first*)
-            foreach (IMenuItem order in tableOfRequests)
-                order.Serve();
-
-            foreach (string customerName in tableOfRequests.CustomerNameList)
-            {
-                List<IMenuItem> orders = tableOfRequests[customerName];
-                string result = printOrders(orders);
-                ResultList.Add($"customer {customerName} served: " + result);
-            }
-
-            anythingToServe = false;
-            ordersCount = 0;
-            tableOfRequests.Clear();
-        }
         //async method of Serve
         public async Task<List<string>> ServeAsync()
         {
-
+            //TODO: You should use LINQ as much as possible. Please use linq instead of all 'foreach'
             await Task.Run(() =>
             {
                 lock (this)
@@ -92,6 +70,7 @@ namespace App.My_Restaurant.Employees
                     foreach (IMenuItem order in tableOfRequests)
                         order.Serve();
 
+                    //TODO: ResultList var will be removed when you replace this foreach with linq
                     //ordered by name
                     foreach (string customerName in tableOfRequests.CustomerNameList.OrderBy(o=>o))
                     {
@@ -108,6 +87,8 @@ namespace App.My_Restaurant.Employees
             });
             return ResultList;
         }
+
+        //TODO: this method will be removed(or merged with the previous method) when you replace 'foreach' with linq in ServeAsync method
         private string printOrders(List<IMenuItem> orders)
         {
             StringBuilder result = new StringBuilder();
@@ -123,7 +104,5 @@ namespace App.My_Restaurant.Employees
 
             return result.ToString();
         }
-
-
     }
 }

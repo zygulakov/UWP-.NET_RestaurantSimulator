@@ -6,9 +6,9 @@ using App.My_Restaurant.Food;
 
 namespace App.My_Restaurant.Table
 {
+    //TODO: This class needs refactoring. Dictionary also implemented IEnumerable. If inherit this class from Dictionary<string, List<IMenuItem>> instead of IEnumerable<IMenuItem> it should be small class.
     class TableRequests : IEnumerable<IMenuItem>
     {
-
         private Dictionary<string, List<IMenuItem>> items;
         private readonly int MAX_CUSTOMER_QUANTITY;
         private int orderCount;
@@ -18,11 +18,14 @@ namespace App.My_Restaurant.Table
             MAX_CUSTOMER_QUANTITY = maxCustomerQuantity;
             items = new Dictionary<string, List<IMenuItem>>();
         }
+
         //Properties
         public List<string> CustomerNameList
         {
             get => items.Keys.ToList<string>();
         }
+
+        //TODO: You should not seperate methods for food and drink. Let's create just Add<T> method for IMenuItem type
         public void AddFood<T>(int amountOfOrder, string nameOfCustomer)
         {
             if (orderCount > MAX_CUSTOMER_QUANTITY)
@@ -37,21 +40,22 @@ namespace App.My_Restaurant.Table
             addToOrderList(item, nameOfCustomer);
 
             orderCount = items.Count;
-
         }
+
         public void AddDrink(Drink drink, string nameOfCustomer)
         {
             addToOrderList(drink, nameOfCustomer);
         }
-        public List<IMenuItem> GetOrdersByType<T>()
+
+        public List<IMenuItem> Get<T>()
         {
             IEnumerable<IMenuItem> sameOrders = from orders in items.Values
                                                 from order in orders
                                                 where (order is T)
                                                 select order;
-
             return sameOrders.ToList();
         }
+
         //indexers
         public List<IMenuItem> this[string name]
         {
@@ -66,7 +70,6 @@ namespace App.My_Restaurant.Table
         }
         public IEnumerator<IMenuItem> GetEnumerator()
         {
-
             IEnumerable<IMenuItem> drinks = from orders in items.Values
                                             from order in orders
                                             where order is Drink

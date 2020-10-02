@@ -27,9 +27,8 @@ namespace App.My_Restaurant.Food
             {
                 Crack();
             }
-
         }
-        
+
         public void Dispose()
         {
             DiscardShell();
