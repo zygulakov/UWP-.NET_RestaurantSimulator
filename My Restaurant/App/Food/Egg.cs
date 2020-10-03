@@ -28,20 +28,9 @@ namespace App.My_Restaurant.Food
                 Crack();
             }
         }
-
         public void Dispose()
         {
             DiscardShell();
-        }
-
-        public override IMenuItem Obtain()
-        {
-            return this;
-        }
-
-        public override IMenuItem Serve()
-        {
-            return this;
         }
     }
 }

@@ -13,9 +13,8 @@ namespace App.My_Restaurant.Food
             get;
             set;
         }
-        public IMenuItem Obtain() { return this; }
-        public IMenuItem Serve() { return this; }
-
+        public virtual IMenuItem Obtain() { return this; }
+        public virtual IMenuItem Serve() { return this; }
         public override string ToString()
         {
             return this.GetType().Name;

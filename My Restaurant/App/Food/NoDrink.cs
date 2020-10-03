@@ -8,6 +8,5 @@ namespace App.My_Restaurant.Food
 {
     class NoDrink : Drink
     {
-  
     }
 }

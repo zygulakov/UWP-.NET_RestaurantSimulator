@@ -17,15 +17,5 @@ namespace App.My_Restaurant.Food
                 CutUp();
             }
         }
-
-        public override IMenuItem Obtain()
-        {
-            return this;
-        }
-
-        public override IMenuItem Serve()
-        {
-            return this;
-        }
     }
 }

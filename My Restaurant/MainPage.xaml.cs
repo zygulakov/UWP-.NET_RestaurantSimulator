@@ -1,7 +1,6 @@
 ﻿using App.My_Restaurant.Food;
 using App.My_Restaurant.Employees;
 using System;
-using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using App.My_Restaurant.Table;
@@ -18,22 +17,19 @@ namespace My_Restaurant
     public sealed partial class MainPage : Page
     {
         private EmployeeServer employeeServer;
-        private EmployeeCook employeeCook1;
-        private EmployeeCook employeeCook2;
-        private List<string> resutlsOfCooking;
-        private bool anythingToCook;
-
+        private List<EmployeeCook> employeeCooks;
+        private List<Task> cookRes;
+        private bool anythingToCook,stillCooking;
         public MainPage()
         {
             this.InitializeComponent();
             employeeServer = new EmployeeServer();
-            employeeCook1 = new EmployeeCook();
-            employeeCook2 = new EmployeeCook();
-            
-            DrinksList.Items.Add(new Tea(1));
-            DrinksList.Items.Add(new CocaCola(1));
-            DrinksList.Items.Add(new Pepsi(1));
-            DrinksList.Items.Add(new NoDrink());
+            employeeCooks = new List<EmployeeCook>() { new EmployeeCook(), new EmployeeCook() };
+            cookRes = new List<Task>();
+            DrinksList.Items.Add(typeof(Tea).Name);
+            DrinksList.Items.Add(typeof(CocaCola).Name);
+            DrinksList.Items.Add(typeof(Pepsi).Name);
+            DrinksList.Items.Add(typeof(NoDrink).Name);
             DrinksList.SelectedItem = DrinksList.Items[0];
         }
 
@@ -43,8 +39,10 @@ namespace My_Restaurant
             {
                 int eggQuantitiy = int.Parse(amountOfEgg.Text);
                 int chickenQuantity = int.Parse(amountOfChicken.Text);
-                Drink drink = (Drink)DrinksList.SelectedItem;
+                string drink = (string)DrinksList.SelectedItem;
                 string name = CustomerName.Text;
+                if (name.Length < 1)
+                    throw new Exception("please enter valid name");
 
                 string result = default;
                 lock (employeeServer)
@@ -69,25 +67,34 @@ namespace My_Restaurant
                 Results.Text += ex.Message + "\n";
             }
         }
-
         private async void SendAllCustomerReqToCook_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (!anythingToCook)
                     throw new Exception("already served");
+                if (stillCooking)
+                    throw new Exception("your food getting ready please wait");
+                stillCooking = true;
                 TableRequests reqTable = employeeServer.tableOfRequests;
                 Results.Text += "Cooking ....." + "\n";
-                //TODO: You are giving one tableRequest to 2 cooks. Only one who are free should take the table request to process. 
-                Task<string> t = employeeCook1.ProcessAsync(reqTable);
-                Task<string> t2 = employeeCook2.ProcessAsync(reqTable);
-                await Task.WhenAll(t, t2);
+                //TODO: You are giving one tableRequest to 2 cooks. Only one who are free should take the table request to process. ***
+                employeeCooks.ForEach(emp =>
+                {
+                    if (emp.IsAvailable)
+                        cookRes.Add(emp.ProcessAsync(reqTable));
+                });
+
+                await Task.WhenAll(cookRes);
                 Results.Text += "Cooked ....." + "\n";
 
                 Results.Text += "Getting ready to serve ....." + "\n";
-                resutlsOfCooking = await employeeServer.ServeAsync();
-                Results.Text += "Ready to Serve" + "\n";
+                List<string> resutlsOfCooking = await employeeServer.ServeAsync();
+                Results.Text += "Serving" + "\n";
+                resutlsOfCooking.ForEach(result => Results.Text += result + "\n");
                 anythingToCook = false;
+                stillCooking = false;
+                cookRes.Clear();
             }
             catch (Exception ex)
             {
@@ -95,24 +102,7 @@ namespace My_Restaurant
             }
         }
 
-        //TODO: For the project #5 this ServePreparedFoodToTheCustomer button should be deleted from UI. Please review the design again.
-        private void ServePreparedFoodToTheCustomer_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (resutlsOfCooking == null)
-                    throw new Exception("No food to serve , please order...");
-                foreach (string result in resutlsOfCooking)
-                {
-                    Results.Text += result + "\n";
-                }
-                resutlsOfCooking = null;
+        //TODO: For the project #5 this ServePreparedFoodToTheCustomer button should be deleted from UI. Please review the design again.***
 
-            }
-            catch (Exception ex)
-            {
-                Results.Text += ex.Message + "\n";
-            }
-        }
     }
 }
