@@ -19,7 +19,7 @@ namespace My_Restaurant
         private EmployeeServer employeeServer;
         private List<EmployeeCook> employeeCooks;
         private List<Task> cookRes;
-        private bool anythingToCook,stillCooking;
+        private bool anythingToCook;
         public MainPage()
         {
             this.InitializeComponent();
@@ -41,10 +41,10 @@ namespace My_Restaurant
                 int chickenQuantity = int.Parse(amountOfChicken.Text);
                 string drink = (string)DrinksList.SelectedItem;
                 string name = CustomerName.Text;
-                if (name.Length < 1)
+                if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
                     throw new Exception("please enter valid name");
 
-                string result = default;
+                string result = string.Empty;
                 lock (employeeServer)
                 {
                     result = employeeServer.RecieveRequest(eggQuantitiy, chickenQuantity, drink, name);
@@ -71,13 +71,12 @@ namespace My_Restaurant
         {
             try
             {
-                if (!anythingToCook)
+               if (!anythingToCook)
                     throw new Exception("already served");
-                if (stillCooking)
-                    throw new Exception("your food getting ready please wait");
-                stillCooking = true;
+                
+                anythingToCook = false;
                 TableRequests reqTable = employeeServer.tableOfRequests;
-                Results.Text += "Cooking ....." + "\n";
+                Results.Text += "Sent to Cook!" + "\n";
                 //TODO: You are giving one tableRequest to 2 cooks. Only one who are free should take the table request to process. ***
                 employeeCooks.ForEach(emp =>
                 {
@@ -92,8 +91,6 @@ namespace My_Restaurant
                 List<string> resutlsOfCooking = await employeeServer.ServeAsync();
                 Results.Text += "Serving" + "\n";
                 resutlsOfCooking.ForEach(result => Results.Text += result + "\n");
-                anythingToCook = false;
-                stillCooking = false;
                 cookRes.Clear();
             }
             catch (Exception ex)
