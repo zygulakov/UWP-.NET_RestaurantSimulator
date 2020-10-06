@@ -15,7 +15,7 @@
         <TextBlock x:Name="quality" HorizontalAlignment="Left" Margin="148,306,0,0" Text="quality" TextWrapping="Wrap" VerticalAlignment="Top" Width="63"/>
         <Button x:Name="SendAllCustomerReqToCook" Content="Send all Customer requests to the Cook" Margin="45,250,0,0" VerticalAlignment="Top" Width="643" Click="SendAllCustomerReqToCook_Click"  />
         <TextBlock HorizontalAlignment="Left" Margin="43,340,0,0" Text="Results:" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <TextBox x:Name="Results" HorizontalAlignment="Left" Margin="43,364,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Height="176" Width="645"/>
+        <TextBox x:Name="Results" HorizontalAlignment="Left" Margin="43,364,0,20" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Height="Auto" Width="645" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
         <TextBlock HorizontalAlignment="Left" Margin="130,69,0,0" Text="How many chicken?" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="130,107,0,0" Text="How many egg?" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <ComboBox x:Name="DrinksList" Margin="367,77,0,0" Width="133" PlaceholderText="Drinks" />
