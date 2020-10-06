@@ -51,7 +51,6 @@ namespace App.My_Restaurant.Employees
         //async method of Serve
         public async Task<List<string>> ServeAsync()
         {
-            //TODO: You should use LINQ as much as possible. Please use linq instead of all 'foreach'***
             return await Task.Run(() =>
              {
                  lock (this)
@@ -66,7 +65,6 @@ namespace App.My_Restaurant.Employees
                                                             select order;
                      drinksAndFood.ToList().ForEach(order => order.Serve());
 
-                     //TODO: ResultList var will be removed when you replace this foreach with linq***
                      //ordered by name
                      List<string> servingResults = new List<string>();
                      tableOfRequests.ToList().OrderBy(i => i.Key).ToList().ForEach(orders =>
@@ -89,8 +87,5 @@ namespace App.My_Restaurant.Employees
              });
 
         }
-
-        //TODO: this method will be removed(or merged with the previous method) when you replace 'foreach' with linq in ServeAsync method***
-
     }
 }

@@ -18,7 +18,6 @@ namespace App.My_Restaurant.Employees
             {
                 semSlim.WaitAsync();
                 List<IMenuItem> orders = tableRequests.Get<CookedFood>();
-                //TODO: Can we use Paraller.Foreach(...) here? So it will be done faster.***
                 Parallel.ForEach(orders, (order) =>
                 {
                     if (order is Egg egg)

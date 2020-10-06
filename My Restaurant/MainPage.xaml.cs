@@ -77,7 +77,6 @@ namespace My_Restaurant
                 anythingToCook = false;
                 TableRequests reqTable = employeeServer.tableOfRequests;
                 Results.Text += "Sent to Cook!" + "\n";
-                //TODO: You are giving one tableRequest to 2 cooks. Only one who are free should take the table request to process. ***
                 employeeCooks.ForEach(emp =>
                 {
                     if (emp.IsAvailable)
@@ -98,8 +97,5 @@ namespace My_Restaurant
                 Results.Text += ex.Message + "\n";
             }
         }
-
-        //TODO: For the project #5 this ServePreparedFoodToTheCustomer button should be deleted from UI. Please review the design again.***
-
     }
 }

@@ -6,7 +6,6 @@ using App.My_Restaurant.Food;
 
 namespace App.My_Restaurant.Table
 {
-    //TODO: This class needs refactoring. Dictionary also implemented IEnumerable. If inherit this class from Dictionary<string, List<IMenuItem>> instead of IEnumerable<IMenuItem> it should be small class.***
     class TableRequests : Dictionary<string, List<IMenuItem>>
     {
         private readonly int MAX_CUSTOMER_QUANTITY;
@@ -14,7 +13,7 @@ namespace App.My_Restaurant.Table
         {
             MAX_CUSTOMER_QUANTITY = maxCustomerQuantity;
         }
-        //TODO: You should not seperate methods for food and drink. Let's create just Add<T> method for IMenuItem type***
+
         public void Add<T>(int amountOfOrder, string nameOfCustomer)
         {
             if (this.Count > MAX_CUSTOMER_QUANTITY)
@@ -36,6 +35,7 @@ namespace App.My_Restaurant.Table
                                                 select order;
             return sameOrders.ToList();
         }
+
         private void addToOrderList(IMenuItem newOrder, string name)
         {
             if (ContainsKey(name))
@@ -50,13 +50,14 @@ namespace App.My_Restaurant.Table
             else
                 this.Add(name, new List<IMenuItem>() { newOrder });
         }
+
         private IMenuItem getObjectOfType(Type t, int quantity)
         {
+            //TODO: Can you test using Activator.CreateInstance(...) to create object? So, it should replace all the 'if' conditions
             if (t == typeof(Egg))
                 return new Egg(quantity);
             if (t == typeof(Chicken))
                 return new Chicken(quantity);
-
             if (t == typeof(CocaCola))
                 return new CocaCola(quantity);
             if (t == typeof(Pepsi))
