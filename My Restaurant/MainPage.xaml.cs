@@ -17,15 +17,20 @@ namespace My_Restaurant
     public sealed partial class MainPage : Page
     {
         private EmployeeServer employeeServer;
-        private List<EmployeeCook> employeeCooks;
-        private List<Task> cookRes;
+        private List<EmployeeCook> employeeCookList;
+        private List<TableRequests> tableOfReqsList;
+        private List<Task> cooksResultTasks;
         private bool anythingToCook;
+        private readonly int MAX_CUSTOMER_PER_TABLE = 8;
         public MainPage()
         {
             this.InitializeComponent();
-            employeeServer = new EmployeeServer();
-            employeeCooks = new List<EmployeeCook>() { new EmployeeCook(), new EmployeeCook() };
-            cookRes = new List<Task>();
+            
+            employeeServer = new EmployeeServer(MAX_CUSTOMER_PER_TABLE);
+            employeeCookList = new List<EmployeeCook>() { new EmployeeCook(), new EmployeeCook() };
+            cooksResultTasks = new List<Task>();
+            tableOfReqsList = new List<TableRequests>();
+            employeeServer.TableOfRequests = new TableRequests();
             DrinksList.Items.Add(typeof(Tea).Name);
             DrinksList.Items.Add(typeof(CocaCola).Name);
             DrinksList.Items.Add(typeof(Pepsi).Name);
@@ -43,7 +48,6 @@ namespace My_Restaurant
                 string name = CustomerName.Text;
                 if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
                     throw new Exception("please enter valid name");
-
                 string result = string.Empty;
                 lock (employeeServer)
                 {
@@ -73,24 +77,36 @@ namespace My_Restaurant
             {
                if (!anythingToCook)
                     throw new Exception("already served");
-                
                 anythingToCook = false;
-                TableRequests reqTable = employeeServer.tableOfRequests;
+                //adding table to list of waiting tables to be cooked
+                tableOfReqsList.Add(employeeServer.TableOfRequests);
+                //giving server new table for new reqs
+                employeeServer.TableOfRequests = new TableRequests();
+                
                 Results.Text += "Sent to Cook!" + "\n";
-                employeeCooks.ForEach(emp =>
+                employeeCookList.ForEach(emp =>
                 {
+                    //cooking all waiting requestTables
                     if (emp.IsAvailable)
-                        cookRes.Add(emp.ProcessAsync(reqTable));
+                        tableOfReqsList.ForEach(table =>
+                        {
+                            Task<string> cookTask = emp.ProcessAsync(table);
+                            cooksResultTasks.Add(cookTask);
+                        });
                 });
 
-                await Task.WhenAll(cookRes);
-                Results.Text += "Cooked ....." + "\n";
+                await Task.WhenAll(cooksResultTasks);
 
+                Results.Text += "Cooked ....." + "\n";
                 Results.Text += "Getting ready to serve ....." + "\n";
-                List<string> resutlsOfCooking = await employeeServer.ServeAsync();
+                //serving all requestTable list
+                tableOfReqsList.ForEach(async table => { 
+                List<string> resutlsOfCooking = await employeeServer.ServeAsync(table);
                 Results.Text += "Serving" + "\n";
                 resutlsOfCooking.ForEach(result => Results.Text += result + "\n");
-                cookRes.Clear();
+                });
+                cooksResultTasks.Clear();
+                tableOfReqsList.Clear();
             }
             catch (Exception ex)
             {

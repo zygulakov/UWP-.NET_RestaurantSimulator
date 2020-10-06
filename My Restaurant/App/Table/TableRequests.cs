@@ -8,17 +8,19 @@ namespace App.My_Restaurant.Table
 {
     class TableRequests : Dictionary<string, List<IMenuItem>>
     {
-        private readonly int MAX_CUSTOMER_QUANTITY;
-        public TableRequests(int maxCustomerQuantity)
+        private static int _tableNumber;
+        public int TableNumber { get; private set; }
+        public TableRequests()
         {
-            MAX_CUSTOMER_QUANTITY = maxCustomerQuantity;
+            //simulating 8 tables;
+            if (_tableNumber > 8)
+                _tableNumber = 0;
+            TableNumber = ++_tableNumber;
         }
 
         public void Add<T>(int amountOfOrder, string nameOfCustomer)
         {
-            if (this.Count > MAX_CUSTOMER_QUANTITY)
-                throw new ArgumentOutOfRangeException($"reached max amount of orders {MAX_CUSTOMER_QUANTITY}");
-            if (nameOfCustomer == null)
+             if (nameOfCustomer == null)
                 throw new ArgumentNullException("item cant be null");
             if (amountOfOrder < 0)
                 throw new ArgumentOutOfRangeException("amount of MenuItem cannot be smaller then 0");
@@ -53,21 +55,9 @@ namespace App.My_Restaurant.Table
 
         private IMenuItem getObjectOfType(Type t, int quantity)
         {
-            //TODO: Can you test using Activator.CreateInstance(...) to create object? So, it should replace all the 'if' conditions
-            if (t == typeof(Egg))
-                return new Egg(quantity);
-            if (t == typeof(Chicken))
-                return new Chicken(quantity);
-            if (t == typeof(CocaCola))
-                return new CocaCola(quantity);
-            if (t == typeof(Pepsi))
-                return new Pepsi(quantity);
-            if (t == typeof(Tea))
-                return new Tea(quantity);
-            if (t == typeof(NoDrink))
-                return new NoDrink();
-
-            throw new ArgumentException("No such type found");
+            //TODO: Can you test using Activator.CreateInstance(...) to create object? So, it should replace all the 'if' conditions***
+            
+            return (IMenuItem)Activator.CreateInstance(t, quantity);
         }
 
     }
