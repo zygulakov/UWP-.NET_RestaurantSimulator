@@ -13,7 +13,6 @@ namespace App.My_Restaurant.Employees
     {
         private int ordersCount;
         private readonly int MAX_ORDERS;
-        private bool anythingToServe;
         public EmployeeServer()
         {
             MAX_ORDERS = 8;
@@ -46,7 +45,6 @@ namespace App.My_Restaurant.Employees
                     break;
             }
             ordersCount = tableOfRequests.Count;
-            anythingToServe = true;
             return $"Recieved from customer({ordersCount}) {customerName} :  {eggQuantity} egg, {chickenQuantity} chicken and {drink}";
         }
 
@@ -58,8 +56,8 @@ namespace App.My_Restaurant.Employees
              {
                  lock (this)
                  {
-                     if (!anythingToServe)
-                         throw new Exception("Nothing to Serve");
+                     if (ordersCount<=0)
+                         throw new Exception("All Done!!!");
 
                      //sorted first drinks then food
                      IEnumerable<IMenuItem> drinksAndFood = from orders in tableOfRequests.Values
@@ -83,7 +81,6 @@ namespace App.My_Restaurant.Employees
                          servingResults.Add(resultTemplate.ToString());
                      });
 
-                     anythingToServe = false;
                      ordersCount = 0;
                      tableOfRequests.Clear();
                      Thread.Sleep(2000);

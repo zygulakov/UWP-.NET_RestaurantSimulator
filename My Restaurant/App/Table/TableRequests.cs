@@ -10,7 +10,6 @@ namespace App.My_Restaurant.Table
     class TableRequests : Dictionary<string, List<IMenuItem>>
     {
         private readonly int MAX_CUSTOMER_QUANTITY;
-        private int orderCount;
         public TableRequests(int maxCustomerQuantity)
         {
             MAX_CUSTOMER_QUANTITY = maxCustomerQuantity;
@@ -18,7 +17,7 @@ namespace App.My_Restaurant.Table
         //TODO: You should not seperate methods for food and drink. Let's create just Add<T> method for IMenuItem type***
         public void Add<T>(int amountOfOrder, string nameOfCustomer)
         {
-            if (orderCount > MAX_CUSTOMER_QUANTITY)
+            if (this.Count > MAX_CUSTOMER_QUANTITY)
                 throw new ArgumentOutOfRangeException($"reached max amount of orders {MAX_CUSTOMER_QUANTITY}");
             if (nameOfCustomer == null)
                 throw new ArgumentNullException("item cant be null");
@@ -27,7 +26,6 @@ namespace App.My_Restaurant.Table
 
             IMenuItem item = getObjectOfType(typeof(T), amountOfOrder);
             addToOrderList(item, nameOfCustomer);
-            orderCount = this.Count;
         }
 
         public List<IMenuItem> Get<T>()
