@@ -56,7 +56,6 @@ namespace App.My_Restaurant.Table
         private IMenuItem getObjectOfType(Type t, int quantity)
         {
             //TODO: Can you test using Activator.CreateInstance(...) to create object? So, it should replace all the 'if' conditions***
-            
             return (IMenuItem)Activator.CreateInstance(t, quantity);
         }
 

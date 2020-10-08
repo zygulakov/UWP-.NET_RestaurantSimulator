@@ -42,9 +42,7 @@ namespace App.My_Restaurant.Employees
                 case "Tea":
                     TableOfRequests.Add<Tea>(1, customerName);
                     break;
-                default:
-                    TableOfRequests.Add<NoDrink>(1, customerName);
-                    break;
+               
             }
             return $"Table: {TableOfRequests.TableNumber} Recieved from customer({TableOfRequests.Count}) {customerName} :  {eggQuantity} egg, {chickenQuantity} chicken and {drink}";
         }
@@ -63,9 +61,10 @@ namespace App.My_Restaurant.Employees
                                                             select order;
                      drinksAndFood.ToList().ForEach(order => order.Serve());
 
-                     //ordered by name
                      List<string> servingResults = new List<string>();
+                     //adding table's number
                      servingResults.Add($"Served Table:{tableOfRequests.TableNumber}");
+                     //adding orders
                      tableOfRequests.ToList().OrderBy(i => i.Key).ToList().ForEach(orders =>
                      {
                          string name = orders.Key;
